@@ -42,12 +42,6 @@ function SideBar(props) {
                     </ListGroupItem>
                     </Row>
                     <Row>
-                    <ListGroupItem tag="button" onClick={() => setActiveMenu("reminder")}>
-                    <FontAwesomeIcon icon={faBell} size ="2x"/>
-                    <span className="navLabel">Reminder</span>
-                    </ListGroupItem>
-                    </Row>
-                    <Row>
                     <ListGroupItem tag="button" onClick={() => setActiveMenu("to-do")}>
                     <FontAwesomeIcon icon={faTasks} size ="2x"/>
                     <span className="navLabel">To Do</span>
