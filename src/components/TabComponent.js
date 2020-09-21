@@ -8,19 +8,17 @@ import Dictaphone from './voice-notes/Dictaphone';
 import store from "../store";
 
 const Tab = (props) => {
+  const userid = store.getState().userProfile.userProf.name;
+
   const [activeTab, setActiveTab] = useState('1');
-  const [teamName, setTeamName] = useState('');
+  const [teamName, setTeamName] = useState(callGetTeamName());
   const [workTabTitle, setWorkTabTitle] = useState('Work');
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const userid = store.getState().userProfile.userProf.name;
 
   const toggleDropDown = () => setDropdownOpen(prevState => !prevState);
  
   const [modal, setModal] = useState(false);
   const toggleModal = () => setModal(!modal);
-
-  //callGetTeamName();
 
   const toggle = tab => {
     if(activeTab !== tab) {
@@ -45,8 +43,11 @@ const Tab = (props) => {
   async function callGetTeamName() {
     var response = await fetch('/teams/'+userid);
     let data = await response.json()
-    console.log(data.teams[0])
-    setTeamName(data.teams[0]);
+    if(data.teams !== undefined){
+      console.log(data.teams[0])
+      setTeamName(data.teams[0]);
+      setWorkTabTitle("Work "+"("+data.teams[0]+")");
+    }
   }
 
   async function addToTeam(team) {
