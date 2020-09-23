@@ -4,6 +4,25 @@ export default store => {
   console.log("Insert first list");
   const firstListId = shortid.generate();
 
+  fetchAndCreateNotes();
+
+  function fetchAndCreateNotes() {
+    console.log("Inside seed.js")
+    //fetching the notes from DB
+    fetch('http://localhost:4000/notes')
+    .then(res => res.text())
+    .then(res => {
+      let notesObj = JSON.parse(res);
+      //looping over the notesobject
+      notesObj.forEach((listData) => {
+        store.dispatch({
+          type: "ADD_LIST",
+          payload: { listId: listData._id, listTitle: listData.noteTitle }
+        });
+      })
+    });
+  }
+
   store.dispatch({
     type: "ADD_LIST",
     payload: { listId: firstListId, listTitle: "First list" }
