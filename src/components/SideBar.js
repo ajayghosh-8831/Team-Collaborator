@@ -24,12 +24,6 @@ function SideBar(props) {
                     </ListGroupItem>
                     </Row>
                     <Row>
-                    <ListGroupItem tag="button" onClick={() => setActiveMenu("calendar")}>
-                    <FontAwesomeIcon icon={faCalendarDay} size ="2x"/>
-                    <span className="navLabel">Calender</span>
-                    </ListGroupItem>
-                    </Row>
-                    <Row>
                     <ListGroupItem tag="button" onClick={() => setActiveMenu("links")}>
                     <FontAwesomeIcon icon={faLink} size ="2x"/>
                     <span className="navLabel">Links</span>
@@ -42,9 +36,9 @@ function SideBar(props) {
                     </ListGroupItem>
                     </Row>
                     <Row>
-                    <ListGroupItem tag="button" onClick={() => setActiveMenu("reminder")}>
-                    <FontAwesomeIcon icon={faBell} size ="2x"/>
-                    <span className="navLabel">Reminder</span>
+                    <ListGroupItem tag="button" onClick={() => setActiveMenu("calendar")}>
+                    <FontAwesomeIcon icon={faCalendarDay} size ="2x"/>
+                    <span className="navLabel">Calender</span>
                     </ListGroupItem>
                     </Row>
                     <Row>

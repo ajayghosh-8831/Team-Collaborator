@@ -33,8 +33,15 @@ function App() {
       type: "USER_LOGIN",
       payload: {userEmail:res.profileObj.email,name:res.profileObj.name,imageUrl:res.profileObj.imageUrl}
     });
+    createUser(res);
     toggle();
   };
+
+  async function createUser(userDetails) {
+    console.log("Creating user in DB "+userDetails.profileObj.name)
+    const response = await fetch('http://localhost:4000/user/'+userDetails.profileObj.name);
+    const data = await response.json();
+  }
 
   const onFailure = (res) => {
     console.log('Login failed: res:', res);
