@@ -11,6 +11,31 @@ exports.create = (req, res) => {
 }
 };
 
+exports.createNewNote = (req, res) => {
+    console.log("Creating the shared notes in DB")
+
+    console.log("Creating notes model")
+    // Create a Note
+    const note = new Note({
+        noteTitle: req.body.noteTitle || "Untitled Note", 
+        noteDesc: req.body.noteDesc,
+        isShared : req.body.isShared,
+        sharedWith : req.body.teamName
+    });
+
+    console.log("Created model")
+    console.log(note)
+    // Save Note in the database
+    note.save()
+    .then(data => {
+        res.send(data);
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message || "Some error occurred while creating the Note."
+        });
+    });
+};
+
 exports.findAll = (req, res) => {
     Note.find()
   .then(notes => {

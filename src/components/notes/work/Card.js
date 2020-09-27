@@ -3,6 +3,7 @@ import "../styles/Card.css";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
+import { Button } from 'reactstrap';
 
 class Card extends Component {
   state = {
@@ -35,6 +36,7 @@ class Card extends Component {
               onMouseEnter={this.startHover}
               onMouseLeave={this.endHover}
             >
+              <img id="Avatar" alt="User Image" src={"https://lh3.googleusercontent.com/a-/AOh14GiAOjujvvgiCWIQxkBg9P2penEdL5ld68cfLMTK5A=s96-c"}/>
               {card.text}
             </div>
           )}

@@ -18,22 +18,6 @@ class Board extends Component {
     if (!destination) return;
 
     const { dispatch } = this.props;
-
-    // Move list
-    if (type === "COLUMN") {
-      // Prevent update if nothing has changed
-      if (source.index !== destination.index) {
-        dispatch({
-          type: "MOVE_WORK_LIST",
-          payload: {
-            oldListIndex: source.index,
-            newListIndex: destination.index
-          }
-        });
-      }
-      return;
-    }
-
     // Move card
     if (
       source.index !== destination.index ||
@@ -53,8 +37,6 @@ class Board extends Component {
 
   render() {
     const { board } = this.props;
-    const { addingList } = this.state;
-
     return (
       
       <DragDropContext onDragEnd={this.handleDragEnd}>

@@ -42,9 +42,17 @@ class Card extends Component {
   shareCard = async text => {  // We cac call Share API call here
     const { card, dispatch } = this.props;
     alert("card Id :"+card._id +" & "+"card Text :" +card.text )
-    this.endSharing();
 
-   
+    await fetch('/create-note', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({noteTitle: card._id, 
+        noteDesc: card.text, isShared: true, teamName: "Expedia"})
+    });
+    this.endSharing();
   };
 
   deleteCard = async () => {

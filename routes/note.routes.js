@@ -2,7 +2,7 @@ module.exports = (app) => {
     const notes = require('../controllers/note.controllers.js');
 
 // Create a new Note
-app.post('/team-collaborator/usernotes', notes.create);
+app.post('/create-note', notes.createNewNote);
 
 app.get('/notes', notes.findAll);
 
