@@ -4,11 +4,7 @@ module.exports = (app) => {
 // Create a new Note
 app.post('/team-collaborator/usernotes', notes.create);
 
-app.get('/notes', notes.findAll);
-
-app.get('/', (req, res) => {
-    res.json({"message": "Welcome to EasyNotes application. Take notes quickly. Organize and keep track of all your notes."});
-});
+app.get('/team-collaborator/notes', notes.findAll);
 
 //Retrieve a single Note with noteId
 app.get('/notes/:noteId', notes.findOne);
@@ -17,6 +13,17 @@ app.get('/notes/:noteId', notes.findOne);
 //app.put('/notes/:noteId', notes.update);
 
 //Delete a Note with noteId
-app.delete('/notes/:noteId', notes.delete);
+app.delete('/team-collaborator/notes/:noteId', notes.delete);
+
+//Update Note Title
+app.put('/team-collaborator/updateNotes', notes.updateTitle);
+
+//Update Note Description 
+
+// //Share a note
+// app.post('/team-collaborator/share', notes.share);
+
+// //Get team notes
+// app.get('/team-collaborator/teamnotes',notes.find);
 
 }
