@@ -1,10 +1,9 @@
-import "../../styles/Board.css";
+import "../styles/Board.css";
 
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import List from "./List";
-import AddList from "./AddList";
 
 class Board extends Component {
   state = {
@@ -25,7 +24,7 @@ class Board extends Component {
       // Prevent update if nothing has changed
       if (source.index !== destination.index) {
         dispatch({
-          type: "MOVE_LIST",
+          type: "MOVE_WORK_LIST",
           payload: {
             oldListIndex: source.index,
             newListIndex: destination.index
@@ -41,7 +40,7 @@ class Board extends Component {
       source.droppableId !== destination.droppableId
     ) {
       dispatch({
-        type: "MOVE_CARD",
+        type: "MOVE_WORK_CARD",
         payload: {
           sourceListId: source.droppableId,
           destListId: destination.droppableId,
@@ -65,21 +64,6 @@ class Board extends Component {
               {board.lists.map((listId, index) => {
                 return <List listId={listId} key={listId} index={index} />;
               })}
-
-              {provided.placeholder}
-
-              <div className="Add-List" style={{visibility:"hidden"}}>
-                {addingList ? (
-                  <AddList toggleAddingList={this.toggleAddingList} />
-                ) : (
-                  <div
-                    onClick={this.toggleAddingList}
-                    className="Add-List-Button"
-                  >
-                    <ion-icon name="add" /> Add a list
-                  </div>
-                )}
-              </div>
             </div>
           )}
         </Droppable>
@@ -88,6 +72,6 @@ class Board extends Component {
   }
 }
 
-const mapStateToProps = state => ({ board: state.board });
+const mapStateToProps = state => ({ board: state.workBoard });
 
 export default connect(mapStateToProps)(Board);
