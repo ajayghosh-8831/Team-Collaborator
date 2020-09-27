@@ -7,6 +7,7 @@ import Tab from  './TabComponent';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {GoogleLogin} from 'react-google-login';
 import store from "../store";
+import org_store from "../org_store";
 
 import { refreshTokenSetup } from '../utils/refreshToken';
 
@@ -57,7 +58,7 @@ function App() {
       <Header menuItem={menuItem}/>
       <SideBar setActiveMenu={setActiveMenu}/>
       </div>
-      <Modal isOpen={modal} toggle={toggle} backdrop={false} keyboard={false} fade={false}>
+      {/* <Modal isOpen={modal} toggle={toggle} backdrop={false} keyboard={false} fade={false}>
         <ModalHeader>Login with Google</ModalHeader>
         <ModalBody>
           Please Click the below button to login using your Google Credentials
@@ -73,7 +74,7 @@ function App() {
           isSignedIn={true}
         />
         </ModalFooter>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { Button,Modal,TabContent, TabPane, Nav, NavItem, NavLink,Row, Col,ModalH
 import classnames from 'classnames';
 import PersonalContent from "./notes/PersonalContent"
 import OrganizationContent from "./notes/OrganizationContent"
+import WorkContent from "./notes/WorkContent"
 import Dictaphone from './voice-notes/Dictaphone';
 import store from "../store";
 
@@ -21,6 +22,7 @@ const Tab = (props) => {
   const toggleModal = () => setModal(!modal);
 
   const toggle = tab => {
+    localStorage.setItem('tab',tab);
     if(activeTab !== tab) {
       if(tab === '2'){
         callGetTeamName();
@@ -101,6 +103,7 @@ const Tab = (props) => {
           </Row>
         </TabPane>
         <TabPane tabId="2">
+        
         <Row>
             <Col sm="8">
               <h1>Organization Stuffs here</h1>
@@ -108,7 +111,7 @@ const Tab = (props) => {
           </Row>
           <Row>
           <div style={{ width: "100%"}}>
-          {activeMenu === "notes" && <OrganizationContent/>}
+          {activeMenu === "notes" && <WorkContent/>}
           {activeMenu === "voice-notes" && <Dictaphone />}
           {activeMenu === "reminder" && <h1> Work Reminders here </h1>}
           {activeMenu === "to-do" && <h1> Work To-Do here </h1>}

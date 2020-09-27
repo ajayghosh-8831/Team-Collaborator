@@ -1,13 +1,9 @@
 import { combineReducers, createStore } from "redux";
 import throttle from "lodash.throttle";
-import seed from "./seed";
+import org_seed from "./org_seed";
 
-const board = (state = { lists: [] }, action) => {
+const org_board = (state = { lists: [] }, action) => {
   switch (action.type) {
-    case "ADD_LIST": {
-      const { listId } = action.payload;
-      return { lists: [...state.lists, listId] };
-    }
     case "ADD_LIST_ORG": {
       const { listId } = action.payload;
       return { lists: [...state.lists, listId] };
@@ -32,14 +28,14 @@ const board = (state = { lists: [] }, action) => {
 
 const listsById = (state = {}, action) => {
   switch (action.type) {
-    case "ADD_LIST": {
+    case "ADD_LIST_ORG": {
+
       const { listId, listTitle } = action.payload;
       return {
         ...state,
-        [listId]: { _id: listId, title: listTitle, cards: [] }
+        [listId]: { _id: listId, title: listTitle, org_cards: [] }
       };
     }
-    
     case "CHANGE_LIST_TITLE": {
       const { listId, listTitle } = action.payload;
       return {
@@ -52,14 +48,14 @@ const listsById = (state = {}, action) => {
       const { [listId]: deletedList, ...restOfLists } = state;
       return restOfLists;
     }
-    case "ADD_CARD": {
-      const { listId, cardId } = action.payload;
+    case "ADD_CARD_ORG": {
+      const { listId, org_cardId } = action.payload;
       return {
         ...state,
-        [listId]: { ...state[listId], cards: [...state[listId].cards, cardId] }
+        [listId]: { ...state[listId], org_cards: [...state[listId].org_cards, org_cardId] }
       };
     }
-    case "MOVE_CARD": {
+    case "MOVE_CARD_ORG": {
       const {
         oldCardIndex,
         newCardIndex,
@@ -68,33 +64,33 @@ const listsById = (state = {}, action) => {
       } = action.payload;
       // Move within the same list
       if (sourceListId === destListId) {
-        const newCards = Array.from(state[sourceListId].cards);
+        const newCards = Array.from(state[sourceListId].org_cards);
         const [removedCard] = newCards.splice(oldCardIndex, 1);
         newCards.splice(newCardIndex, 0, removedCard);
         return {
           ...state,
-          [sourceListId]: { ...state[sourceListId], cards: newCards }
+          [sourceListId]: { ...state[sourceListId], org_cards: newCards }
         };
       }
       // Move card from one list to another
-      const sourceCards = Array.from(state[sourceListId].cards);
+      const sourceCards = Array.from(state[sourceListId].org_cards);
       const [removedCard] = sourceCards.splice(oldCardIndex, 1);
-      const destinationCards = Array.from(state[destListId].cards);
+      const destinationCards = Array.from(state[destListId].org_cards);
       destinationCards.splice(newCardIndex, 0, removedCard);
       return {
         ...state,
-        [sourceListId]: { ...state[sourceListId], cards: sourceCards },
-        [destListId]: { ...state[destListId], cards: destinationCards }
+        [sourceListId]: { ...state[sourceListId], org_cards: sourceCards },
+        [destListId]: { ...state[destListId], org_cards: destinationCards }
       };
     }
-    case "DELETE_CARD": {
-      const { cardId: deletedCardId, listId } = action.payload;
-      const filterDeleted = cardId => cardId !== deletedCardId;
+    case "DELETE_CARD_ORG": {
+      const { org_cardId: deletedCardId, listId } = action.payload;
+      const filterDeleted = org_cardId => org_cardId !== deletedCardId;
       return {
         ...state,
         [listId]: {
           ...state[listId],
-          cards: state[listId].cards.filter(filterDeleted)
+          org_cards: state[listId].org_cards.filter(filterDeleted)
         }
       };
     }
@@ -105,26 +101,26 @@ const listsById = (state = {}, action) => {
 
 const cardsById = (state = {}, action) => {
   switch (action.type) {
-    case "ADD_CARD": {
-      const { cardText, cardId } = action.payload;
-      return { ...state, [cardId]: { text: cardText, _id: cardId } };
+    case "ADD_CARD_ORG": {
+      const { cardText, org_cardId } = action.payload;
+      return { ...state, [org_cardId]: { text: cardText, _id: org_cardId } };
     }
-    case "CHANGE_CARD_TEXT": {
-      const { cardText, cardId } = action.payload;
-      return { ...state, [cardId]: { ...state[cardId], text: cardText } };
+    case "CHANGE_CARD_TEXT_ORG": {
+      const { cardText, org_cardId } = action.payload;
+      return { ...state, [org_cardId]: { ...state[org_cardId], text: cardText } };
     }
-    case "DELETE_CARD": {
-      const { cardId } = action.payload;
-      const { [cardId]: deletedCard, ...restOfCards } = state;
+    case "DELETE_CARD_ORG": {
+      const { org_cardId } = action.payload;
+      const { [org_cardId]: deletedCard, ...restOfCards } = state;
       return restOfCards;
     }
     // Find every card from the deleted list and remove it
-    case "DELETE_LIST": {
-      const { cards: cardIds } = action.payload;
+    case "DELETE_LIST_ORG": {
+      const { org_cards: org_cardIds } = action.payload;
       return Object.keys(state)
-        .filter(cardId => !cardIds.includes(cardId))
+        .filter(org_cardId => !org_cardIds.includes(org_cardId))
         .reduce(
-          (newState, cardId) => ({ ...newState, [cardId]: state[cardId] }),
+          (newState, org_cardId) => ({ ...newState, [org_cardId]: state[org_cardId] }),
           {}
         );
     }
@@ -145,7 +141,7 @@ const userProfile =(state = {}, action) => {
 }
 
 const reducers = combineReducers({
-  board,
+  org_board,
   listsById,
   cardsById,
   userProfile
@@ -174,18 +170,18 @@ const loadState = () => {
 };
 
 const persistedState = loadState();
-const store = createStore(reducers, persistedState);
+const org_store = createStore(reducers, persistedState);
 
-store.subscribe(
+org_store.subscribe(
   throttle(() => {
-    saveState(store.getState());
+    saveState(org_store.getState());
   }, 1000)
 );
 
-console.log(store.getState());
-if (!store.getState().board.lists.length) {
-  console.log("SEED");
-  seed(store);
+console.log(org_store.getState());
+if (!org_store.getState().org_board.lists.length) {
+  console.log("ORG_SEED");
+  org_seed(org_store);
 }
 
-export default store;
+export default org_store;

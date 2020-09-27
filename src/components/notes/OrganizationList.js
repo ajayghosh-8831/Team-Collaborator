@@ -4,13 +4,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
-import Card from "./Card";
+import OrganizationCard from "./OrganizationCard";
 import CardEditor from "./CardEditor";
 import ListEditor from "./ListEditor";
 
 import shortid from "shortid";
 
-class List extends Component {
+class OrganizationList extends Component {
   state = {
     editingTitle: false,
     title: this.props.list.title,
@@ -28,7 +28,7 @@ class List extends Component {
     const cardId = shortid.generate();
 
     dispatch({
-      type: "ADD_CARD",
+      type: "ADD_CARD_ORG",
       payload: { cardText, cardId, listId }
     });
     
@@ -56,7 +56,7 @@ class List extends Component {
 
     dispatch({
       type: "DELETE_LIST",
-      payload: { listId, cards: list.cards }
+      payload: { listId, org_cards: list.org_cards }
     });
   };
 
@@ -92,8 +92,8 @@ class List extends Component {
               {(provided, _snapshot) => (
                 <div ref={provided.innerRef}>
                   {list.cards &&
-                    list.cards.map((cardId, index) => (
-                      <Card
+                    list.org_cards.map((cardId, index) => (
+                      <OrganizationCard
                         key={cardId}
                         cardId={cardId}
                         index={index}
@@ -128,4 +128,4 @@ const mapStateToProps = (state, ownProps) => ({
   list: state.listsById[ownProps.listId]
 });
 
-export default connect(mapStateToProps)(List);
+export default connect(mapStateToProps)(OrganizationList);

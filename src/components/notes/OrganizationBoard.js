@@ -3,16 +3,16 @@ import "../../styles/Board.css";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import List from "./List";
-import AddList from "./AddList";
+import OrganizationList from "./OrganizationList";
+import OrganizationAddList from "./OrganizationAddList";
 
-class Board extends Component {
+class OrganizationBoard extends Component {
   state = {
-    addingList: false
+    orgaddingList: false
   };
 
   toggleAddingList = () =>
-    this.setState({ addingList: !this.state.addingList });
+    this.setState({ orgaddingList: !this.state.orgaddingList });
 
   handleDragEnd = ({ source, destination, type }) => {
     // dropped outside the allowed zones
@@ -53,19 +53,19 @@ class Board extends Component {
   };
 
   render() {
-    const { board } = this.props;
-    const { addingList } = this.state;
+    const { org_board } = this.props;
+    const { orgaddingList } = this.state;
 
     return (
       
       <DragDropContext onDragEnd={this.handleDragEnd}>
-        <Droppable droppableId="board" direction="horizontal" type="COLUMN">
+        <Droppable droppableId="OrganizationBoard" direction="horizontal" type="COLUMN">
           {(provided, _snapshot) => (
             <div className="Board" ref={provided.innerRef}>
-              {board.lists.map((listId, index) => {
-                return <List listId={listId} key={listId} index={index} />;
+              {org_board.lists.map((listId, index) => {
+                return <OrganizationList listId={listId} key={listId} index={index} />;
               })}
-
+Test
               {provided.placeholder}
             </div>
           )}
@@ -75,6 +75,6 @@ class Board extends Component {
   }
 }
 
-const mapStateToProps = state => ({ board: state.board });
+const mapStateToProps = state => ({ org_board: state.org_board });
 
-export default connect(mapStateToProps)(Board);
+export default connect(mapStateToProps)(OrganizationBoard);

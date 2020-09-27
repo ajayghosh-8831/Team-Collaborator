@@ -6,7 +6,7 @@ import ListEditor from "./ListEditor";
 import shortid from "shortid";
 import EditButtons from "./EditButtons";
 
-class AddList extends Component {
+class OrganizationAddList extends Component {
   state = {
     title: ""
   };
@@ -20,10 +20,11 @@ class AddList extends Component {
     this.props.toggleAddingList();
 
     dispatch({
-      type: "ADD_LIST",
+      type: "ADD_LIST_ORG",
       payload: { listId: shortid.generate(), listTitle: title }
     });
-  
+   
+    
   };
 
   render() {
@@ -49,4 +50,4 @@ class AddList extends Component {
   }
 }
 
-export default connect()(AddList);
+export default connect()(OrganizationAddList);

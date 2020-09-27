@@ -1,15 +1,12 @@
 import shortid from "shortid";
-import React, { Component } from "react";
-export default store => {
+export default org_store => {
   console.log("Insert first list");
   const firstListId = shortid.generate();
   const orgListId = shortid.generate();
 
-  fetchAndCreateNotes();
+  fetchAndCreateOrgNotes();
 
- 
-
-  function fetchAndCreateNotes() {
+  function fetchAndCreateOrgNotes() {
     console.log("Inside seed.js")
     //fetching the notes from DB
     fetch('http://localhost:4000/notes')
@@ -18,8 +15,8 @@ export default store => {
       let notesObj = JSON.parse(res);
       //looping over the notesobject
       notesObj.forEach((listData) => {
-        store.dispatch({
-          type: "ADD_CARD",
+        org_store.dispatch({
+          type: "ADD_CARD_ORG",
           payload: {
             listId: firstListId,
             cardId: listData._id,
@@ -29,14 +26,18 @@ export default store => {
       })
     });
   }
+ 
 
-
-  store.dispatch({
-    type: "ADD_LIST",
-    payload: { listId: firstListId, listTitle: "My Note" }
+  org_store.dispatch({
+    type: "ADD_LIST_ORG",
+    payload: { listId: orgListId, listTitle: "Team Note" }
   });
 
-  store.dispatch({
+
+  
+ 
+
+  org_store.dispatch({
     type:"USER_LOGIN",
     payload:{
       userEmail:"",
