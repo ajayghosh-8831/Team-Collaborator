@@ -20,7 +20,9 @@ exports.createNewNote = (req, res) => {
         noteTitle: req.body.noteTitle || "Untitled Note", 
         noteDesc: req.body.noteDesc,
         isShared : req.body.isShared,
-        sharedWith : req.body.teamName
+        sharedWith : req.body.teamName,
+        sharedBy : req.body.userId,
+        sharedByUserImg : req.body.userImg
     });
 
     console.log("Created model")

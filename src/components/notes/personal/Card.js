@@ -3,8 +3,8 @@ import "../styles/Card.css";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
-
 import CardEditor from "./CardEditor";
+import  store  from "../../../store"
 
 class Card extends Component {
   state = {
@@ -50,7 +50,11 @@ class Card extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({noteTitle: card._id, 
-        noteDesc: card.text, isShared: true, teamName: "Expedia"})
+        noteDesc: card.text, isShared: true, 
+        teamName: "Expedia",
+        userId : store.getState().userProfile.userProf.name,
+        userImg : store.getState().userProfile.userProf.imageUrl
+      })
     });
     this.endSharing();
   };

@@ -228,8 +228,8 @@ const cardsById = (state = {}, action) => {
 const workCardsById = (state = {}, action) => {
   switch (action.type) {
     case "ADD_WORK_CARD": {
-      const { cardText, cardId } = action.payload;
-      return { ...state, [cardId]: { text: cardText, _id: cardId } };
+      const { cardText, cardId, cardImg } = action.payload;
+      return { ...state, [cardId]: { text: cardText, _id: cardId, img: cardImg} };
     }
     case "CHANGE_WORK_CARD_TEXT": {
       const { cardText, cardId } = action.payload;

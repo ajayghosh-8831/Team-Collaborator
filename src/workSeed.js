@@ -20,7 +20,8 @@ export default store => {
           payload: {
             listId: firstListId,
             cardId: listData.noteTitle,
-            cardText: listData.noteDesc
+            cardText: listData.noteDesc,
+            cardImg : listData.sharedByUserImg
           }
         });
       })

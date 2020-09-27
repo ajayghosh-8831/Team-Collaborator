@@ -36,7 +36,7 @@ class Card extends Component {
               onMouseEnter={this.startHover}
               onMouseLeave={this.endHover}
             >
-              <img id="Avatar" alt="User Image" src={"https://lh3.googleusercontent.com/a-/AOh14GiAOjujvvgiCWIQxkBg9P2penEdL5ld68cfLMTK5A=s96-c"}/>
+              <img id="Avatar" alt="User Image" src={card.img}/>
               {card.text}
             </div>
           )}
