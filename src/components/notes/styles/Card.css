@@ -10,6 +10,7 @@
   font-size: 15px;
   overflow-wrap: break-word;
   min-height: 18px;
+  display: flow-root;
 }
 
 .Card:hover {

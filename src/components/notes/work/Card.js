@@ -36,8 +36,8 @@ class Card extends Component {
               onMouseEnter={this.startHover}
               onMouseLeave={this.endHover}
             >
-              <img id="Avatar" alt="User Image" src={card.img}/>
               {card.text}
+              <img id="Avatar" alt="User Image" style={{float:"right"}} src={card.img}/>
             </div>
           )}
         </Draggable>
