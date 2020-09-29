@@ -16,12 +16,10 @@ app.get('/notes/:noteId', notes.findOne);
 app.delete('/team-collaborator/notes/:noteId', notes.delete);
 
 //Update Note Title
-app.put('/team-collaborator/updateNotes', notes.updateTitle);
+app.put('/team-collaborator/updateNotes', notes.updateNotes);
 
-//Update Note Description 
-
-// //Share a note
-// app.post('/team-collaborator/share', notes.share);
+//Share a note
+app.post('/team-collaborator/share', notes.share);
 
 // //Get team notes
 // app.get('/team-collaborator/teamnotes',notes.find);
