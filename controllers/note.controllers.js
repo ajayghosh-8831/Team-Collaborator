@@ -38,7 +38,9 @@ exports.createNewNote = (req, res) => {
     });
 };
 
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+    await delay(5000);
     Note.find()
   .then(notes => {
     console.log("Fecthing all notes");

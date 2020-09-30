@@ -18,6 +18,10 @@
   right: 0px;
   float: right;
 }
+.loading{
+height: 80px;
+}
+
 .work-div{
   background: #dfe3e6;
   flex-shrink: 0;

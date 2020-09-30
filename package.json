@@ -11,6 +11,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@yisheng90/react-loading": "^1.4.2",
     "cors": "^2.8.5",
     "lodash.throttle": "^4.1.1",
     "mic-recorder-to-mp3": "^2.2.2",

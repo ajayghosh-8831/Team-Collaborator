@@ -5,7 +5,7 @@ const recorder = new MicRecorder({
   bitRate: 128
 });
 
-const Dictaphone = (props) => {
+const VoiceNotes = () => {
 
     const [buttonText, setButtonText] = useState('Start recording');
     const [buttonClass, setButtonClass] = useState('btn btn-primary');
@@ -28,12 +28,15 @@ const Dictaphone = (props) => {
           lastModified: Date.now()
         });
 
-        let li = document.createElement('li');
+        let div = document.createElement('div');
+        let div1 = document.createElement('div');
         let player = new Audio(URL.createObjectURL(file));
         player.controls = true;
         player.style = "width:50%"
-        li.appendChild(player);
-        document.querySelector('#playlist').appendChild(li);
+        div1.classList = "card work-card"
+        div1.appendChild(player);
+        div.appendChild(div1);
+        document.querySelector('#outerDiv').appendChild(div);
  
         setButtonText('Start recording');
         setButtonClass('btn btn-primary');
@@ -51,14 +54,14 @@ const Dictaphone = (props) => {
     }
   
     return (
-      <div className="container text-center">
+      <div class="container text-center">
         <h1>Voice Recorder</h1>
-        <hr />
-        <button id="recordBtn" className={buttonClass} onClick={() => clickHandler()}>{buttonText}</button>
-        <hr />
-        <ol id="playlist"></ol>
-      </div>
+        <button id="recordBtn" class={buttonClass} onClick={() => clickHandler()}>{buttonText}</button>
+        <div id="outerDiv" class="work-div">
+        
+        </div>
+    </div>
     )
 }
 
-export default Dictaphone;
+export default VoiceNotes;

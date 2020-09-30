@@ -4,7 +4,7 @@ import { Button,Modal,TabContent, TabPane, Nav, NavItem, NavLink,Row, Col,ModalH
 import classnames from 'classnames';
 import PersonalContent from "./notes/PersonalContent"
 import OrganizationContent from "./notes/OrganizationContent"
-import Dictaphone from './voice-notes/Dictaphone';
+import VoiceNotes from './voice-notes/VoiceNotes';
 import store from "../store";
 
 const Tab = (props) => {
@@ -85,14 +85,9 @@ const Tab = (props) => {
       <TabContent activeTab={activeTab}>
         <TabPane tabId="1">
           <Row>
-            <Col sm="8">
-              <h1>Your Personal Stuffs here</h1>
-            </Col>           
-          </Row>
-          <Row>
           <div style={{ width: "100%"}}>
           {activeMenu === "notes" && <PersonalContent/>}
-          {activeMenu === "voice-notes" && <Dictaphone />}
+          {activeMenu === "voice-notes" && <VoiceNotes />}
           {activeMenu === "reminder" && <h1> Personal Reminders here </h1>}
           {activeMenu === "to-do" && <h1> Personal To-Do here </h1>}
           {activeMenu === "calendar" && <h1> Personal Calendar here </h1>}
@@ -101,15 +96,10 @@ const Tab = (props) => {
           </Row>
         </TabPane>
         <TabPane tabId="2">
-        <Row>
-            <Col sm="8">
-              <h1>Organization Stuffs here</h1>
-            </Col>
-          </Row>
           <Row>
           <div style={{ width: "100%"}}>
           {activeMenu === "notes" && <OrganizationContent/>}
-          {activeMenu === "voice-notes" && <Dictaphone />}
+          {activeMenu === "voice-notes" && <VoiceNotes />}
           {activeMenu === "reminder" && <h1> Work Reminders here </h1>}
           {activeMenu === "to-do" && <h1> Work To-Do here </h1>}
           {activeMenu === "calendar" && <h1> Work Calendar here </h1>}
