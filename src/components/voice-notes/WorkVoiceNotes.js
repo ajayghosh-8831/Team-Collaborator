@@ -8,6 +8,7 @@ const WorkVoiceNotes = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     fetch('/fetch-all-notes/Expedia')
     .then(res => res.text())
     .then(res => {
@@ -21,6 +22,7 @@ const WorkVoiceNotes = () => {
           lastModified: Date.now()
         });
         setVoiceNotes(voiceNotes => voiceNotes.concat(URL.createObjectURL(file)))
+        setIsLoading(false);
       });
     });
   }, [1]);
