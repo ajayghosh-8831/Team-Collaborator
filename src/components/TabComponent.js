@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import PersonalContent from "./notes/PersonalContent"
 import OrganizationContent from "./notes/OrganizationContent"
 import VoiceNotes from './voice-notes/VoiceNotes';
+import WorkVoiceNotes from './voice-notes/WorkVoiceNotes';
 import store from "../store";
 
 const Tab = (props) => {
@@ -99,7 +100,7 @@ const Tab = (props) => {
           <Row>
           <div style={{ width: "100%"}}>
           {activeMenu === "notes" && <OrganizationContent/>}
-          {activeMenu === "voice-notes" && <VoiceNotes />}
+          {activeMenu === "voice-notes" && <WorkVoiceNotes />}
           {activeMenu === "reminder" && <h1> Work Reminders here </h1>}
           {activeMenu === "to-do" && <h1> Work To-Do here </h1>}
           {activeMenu === "calendar" && <h1> Work Calendar here </h1>}

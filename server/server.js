@@ -29,6 +29,7 @@ mongoose.connect(dbConfig.url, {
 
 require('../routes/note.routes.js')(app);
 require('../routes/user.routes.js')(app);
+require('../routes/voice.routes.js')(app);
 
 app.set('port',process.env.PORT || 4000);
 // listen for requests

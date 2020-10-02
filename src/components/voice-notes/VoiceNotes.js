@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import MicRecorder from 'mic-recorder-to-mp3';
+import shortid from "shortid";
+import  store  from "../../store"
 
 const recorder = new MicRecorder({
   bitRate: 128
@@ -9,6 +11,7 @@ const VoiceNotes = () => {
 
     const [buttonText, setButtonText] = useState('Start recording');
     const [buttonClass, setButtonClass] = useState('btn btn-primary');
+    const [audioElements, setAudioElements] = useState([]);
 
     function startRecording() {
       recorder.start().then(() => {
@@ -22,22 +25,13 @@ const VoiceNotes = () => {
 
     function stopRecording() {
       recorder.stop().getMp3().then(([buffer, blob]) => {
-        console.log(buffer, blob);
         let file = new File(buffer, 'music.mp3', {
           type: blob.type,
           lastModified: Date.now()
         });
-
-        let div = document.createElement('div');
-        let div1 = document.createElement('div');
-        let player = new Audio(URL.createObjectURL(file));
-        player.controls = true;
-        player.style = "width:50%"
-        div1.classList = "card work-card"
-        div1.appendChild(player);
-        div.appendChild(div1);
-        document.querySelector('#outerDiv').appendChild(div);
- 
+        console.log("voice personal");
+        console.log(buffer);
+        setAudioElements(audioElements => audioElements.concat(URL.createObjectURL(file)))
         setButtonText('Start recording');
         setButtonClass('btn btn-primary');
       }).catch((e) => {
@@ -52,15 +46,46 @@ const VoiceNotes = () => {
         stopRecording();
       }
     }
+
+    async function shareCard (audio) {
+      let blob = await fetch(audio.audio).then(r => r.blob());
+      console.log(blob)
+      var formData = new FormData();
+      formData.append('myAudio', blob);
+      formData.append('sharedBy', store.getState().userProfile.userProf.name);
+      formData.append('sharedByUserImg', store.getState().userProfile.userProf.imageUrl);
+      //Later we have to fetch the team neam probably have to used redux to store user's team
+      formData.append('sharedTo', "Expedia");
+
+
+      fetch('/share-voice-notes', {
+        method: "POST", body: formData
+        }).then(response => response.json())
+        .then(success => {
+          alert("successfully shared");
+        })
+        .catch(error => {console.log(error); alert("failed")}
+      );
+    };
   
+    
     return (
-      <div class="container text-center">
-        <h1>Voice Recorder</h1>
-        <button id="recordBtn" class={buttonClass} onClick={() => clickHandler()}>{buttonText}</button>
-        <div id="outerDiv" class="work-div">
-        
+      <div className="container text-center" style={{marginTop:"2%"}}>
+      <button id="recordBtn" className={buttonClass} onClick={() => clickHandler()}>{buttonText}</button>
+        <div>
+              <div id="outerDiv" className="work-div">
+              {audioElements.map(audio => 
+              <div className="card work-card" id={shortid.generate()}>
+                  <audio preload="auto" controls style={{width: '50%'}}>
+                    <source src={audio} />
+                  </audio>
+                  <ion-icon  md="md-share" onClick={() => shareCard({audio})} style={{float: 'right', 
+                  marginTop: "inherit", color:'#007bff', fontSize:'40px'}}></ion-icon>
+                </div>
+              )}
+              </div>
         </div>
-    </div>
+      </div>
     )
 }
 
