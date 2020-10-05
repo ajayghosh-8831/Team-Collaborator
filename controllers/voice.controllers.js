@@ -8,7 +8,7 @@ var storage = multer.diskStorage({
     cb(null, 'public')
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' +file.originalname+ '.mp3')
+    cb(null, Date.now() + '-' +file.originalname)
   }
 })
 
@@ -43,10 +43,24 @@ exports.getVoiceNotes = (req, res) => {
     console.log("fetching voice notesss from DB")
     Voice.find({sharedTo:req.params.teamName})
   .then(voice => {
+      res.header('Content-Type', 'audio/mp3');
       res.send(voice);
   }).catch(err => {
       res.status(500).send({
           message: err.message || "Some error occurred while retrieving user."
       });
   });
+};
+
+exports.getVoiceNote = (req, res) => {
+  console.log("fetching voice notesss from DB")
+  Voice.findOne({sharedTo:req.params.teamName})
+.then(voice => {
+    res.header('Content-Type', 'audio/mp3');
+    res.send(voice.data);
+}).catch(err => {
+    res.status(500).send({
+        message: err.message || "Some error occurred while retrieving user."
+    });
+});
 };

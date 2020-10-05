@@ -15,17 +15,21 @@ const WorkVoiceNotes = () => {
       //console.log(res);
       let responeObj = JSON.parse(res);
       responeObj.forEach(data => {
-        console.log("work blob")
-        console.log(Buffer.from(data.data));
-        let file = new File(Buffer.from(data.data), 'music.mp3', {
-          type: "audio/mp3",
-          lastModified: Date.now()
-        });
-        setVoiceNotes(voiceNotes => voiceNotes.concat(URL.createObjectURL(file)))
+        var base64Flag = 'data:audio/mp3;base64,';
+        var audioStr = arrayBufferToBase64(data.data.data);
+        setVoiceNotes(voiceNotes => voiceNotes.concat(base64Flag+audioStr))
         setIsLoading(false);
       });
     });
   }, [1]);
+
+  function arrayBufferToBase64(buffer) {
+    var binary = '';
+    var bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+    return window.btoa(binary);
+  };
+
 
 
   return (  

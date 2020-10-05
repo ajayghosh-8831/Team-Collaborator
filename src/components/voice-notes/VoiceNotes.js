@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import MicRecorder from 'mic-recorder-to-mp3';
 import shortid from "shortid";
 import  store  from "../../store"
+import { faShareAlt, faCheckCircle} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const recorder = new MicRecorder({
   bitRate: 128
@@ -11,11 +13,11 @@ const VoiceNotes = () => {
 
     const [buttonText, setButtonText] = useState('Start recording');
     const [buttonClass, setButtonClass] = useState('btn btn-primary');
+    const [shareIcon, setShareIcon] = useState(faShareAlt);
     const [audioElements, setAudioElements] = useState([]);
 
     function startRecording() {
       recorder.start().then(() => {
-        console.log("Started recording")
         setButtonText('Stop recording');
         setButtonClass('btn btn-primary btn-danger');
       }).catch((e) => {
@@ -48,24 +50,25 @@ const VoiceNotes = () => {
     }
 
     async function shareCard (audio) {
-      let blob = await fetch(audio.audio).then(r => r.blob());
-      console.log(blob)
-      var formData = new FormData();
-      formData.append('myAudio', blob);
-      formData.append('sharedBy', store.getState().userProfile.userProf.name);
-      formData.append('sharedByUserImg', store.getState().userProfile.userProf.imageUrl);
-      //Later we have to fetch the team neam probably have to used redux to store user's team
-      formData.append('sharedTo', "Expedia");
-
-
-      fetch('/share-voice-notes', {
-        method: "POST", body: formData
-        }).then(response => response.json())
-        .then(success => {
-          alert("successfully shared");
-        })
-        .catch(error => {console.log(error); alert("failed")}
-      );
+      if(shareIcon !== faCheckCircle){
+        let blob = await fetch(audio.audio).then(r => r.blob());
+        var formData = new FormData();
+        formData.append('myAudio', blob);
+        formData.append('sharedBy', store.getState().userProfile.userProf.name);
+        formData.append('sharedByUserImg', store.getState().userProfile.userProf.imageUrl);
+        //Later we have to fetch the team neam probably have to used redux to store user's team
+        formData.append('sharedTo', "Expedia");
+  
+  
+        fetch('/share-voice-notes', {
+          method: "POST", body: formData
+          }).then(response => response.json())
+          .then(success => {
+            alert("saved successfully");
+          })
+          .catch(error => {console.log(error); alert("failed")}
+        );
+      }
     };
   
     
@@ -79,8 +82,9 @@ const VoiceNotes = () => {
                   <audio preload="auto" controls style={{width: '50%'}}>
                     <source src={audio} />
                   </audio>
-                  <ion-icon  md="md-share" onClick={() => shareCard({audio})} style={{float: 'right', 
-                  marginTop: "inherit", color:'#007bff', fontSize:'40px'}}></ion-icon>
+                  <FontAwesomeIcon icon={shareIcon} onClick={() => shareCard({audio})} 
+                  style={{float: 'right', 
+                  marginTop: "inherit", color:'#007bff', fontSize:'40px'}}/>
                 </div>
               )}
               </div>
