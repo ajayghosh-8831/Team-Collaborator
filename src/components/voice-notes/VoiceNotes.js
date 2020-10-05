@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import MicRecorder from 'mic-recorder-to-mp3';
 import shortid from "shortid";
 import  store  from "../../store"
-import { faShareAlt, faCheckCircle} from "@fortawesome/free-solid-svg-icons";
+import { faShareAlt, faCheckCircle, faSave} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Skeleton from '@yisheng90/react-loading';
 
 const recorder = new MicRecorder({
   bitRate: 128
@@ -15,6 +16,8 @@ const VoiceNotes = () => {
     const [buttonClass, setButtonClass] = useState('btn btn-primary');
     const [shareIcon, setShareIcon] = useState(faShareAlt);
     const [audioElements, setAudioElements] = useState([]);
+    const [voiceNotes, setVoiceNotes] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     function startRecording() {
       recorder.start().then(() => {
@@ -49,6 +52,53 @@ const VoiceNotes = () => {
       }
     }
 
+    useEffect(() => {
+      setIsLoading(true);
+      fetch('/fetch-user-notes/'+store.getState().userProfile.userProf.name)
+      .then(function(response) {
+        if (!response.ok) {
+            throw Error(response.statusText);
+        }
+        return response;})
+      .then(res => res.text())
+      .then(res => {
+        let responeObj = JSON.parse(res);
+        responeObj.forEach(data => {
+          var base64Flag = 'data:audio/mp3;base64,';
+          var audioStr = arrayBufferToBase64(data.data.data);
+          setVoiceNotes(voiceNotes => voiceNotes.concat(base64Flag+audioStr))
+          setIsLoading(false);
+        });
+      }).catch(console.log("No notes saved by user"));
+    }, [1]);
+  
+    function arrayBufferToBase64(buffer) {
+      var binary = '';
+      var bytes = [].slice.call(new Uint8Array(buffer));
+      bytes.forEach((b) => binary += String.fromCharCode(b));
+      return window.btoa(binary);
+    };
+
+    
+    
+    async function saveCard (audio) {
+        let blob = await fetch(audio.audio).then(r => r.blob());
+        var formData = new FormData();
+        formData.append('myAudio', blob);
+        formData.append('sharedBy', store.getState().userProfile.userProf.name);
+        formData.append('sharedByUserImg', store.getState().userProfile.userProf.imageUrl);
+  
+        fetch('/save-voice-notes', {
+          method: "POST", body: formData
+          }).then(response => response.json())
+          .then(success => {
+            alert("saved successfully");
+          })
+          .catch(error => {console.log(error); alert("failed")}
+        );
+          
+    };
+
     async function shareCard (audio) {
       if(shareIcon !== faCheckCircle){
         let blob = await fetch(audio.audio).then(r => r.blob());
@@ -58,7 +108,6 @@ const VoiceNotes = () => {
         formData.append('sharedByUserImg', store.getState().userProfile.userProf.imageUrl);
         //Later we have to fetch the team neam probably have to used redux to store user's team
         formData.append('sharedTo', "Expedia");
-  
   
         fetch('/share-voice-notes', {
           method: "POST", body: formData
@@ -73,6 +122,7 @@ const VoiceNotes = () => {
   
     
     return (
+      <div>
       <div className="container text-center" style={{marginTop:"2%"}}>
       <button id="recordBtn" className={buttonClass} onClick={() => clickHandler()}>{buttonText}</button>
         <div>
@@ -85,11 +135,58 @@ const VoiceNotes = () => {
                   <FontAwesomeIcon icon={shareIcon} onClick={() => shareCard({audio})} 
                   style={{float: 'right', 
                   marginTop: "inherit", color:'#007bff', fontSize:'40px'}}/>
+                  <FontAwesomeIcon icon={faSave} onClick={() => saveCard({audio})} 
+                  style={{float: 'left', 
+                  marginTop: "inherit", color:'#007bff', fontSize:'40px'}}/>
                 </div>
               )}
               </div>
         </div>
       </div>
+      <h1 style={{textAlign: 'center'}}>Your saved cards</h1>
+        <div>
+        <div>
+        {isLoading && (
+          <div className="work-div">
+              <div className="card work-card loading">
+              <Skeleton row={1} />
+              </div>
+              <div className="card work-card loading">
+              <Skeleton row={1} />
+              </div>
+              <div className="card work-card loading">
+              <Skeleton row={1} />
+              </div>
+              <div className="card work-card loading">
+              <Skeleton row={1} />
+              </div>
+              <div className="card work-card loading">
+              <Skeleton row={1} isLoading={!isLoading} />
+              </div>
+            </div>
+              )}
+          </div>
+            <div>
+            {!isLoading && (
+              <div className="container text-center" style={{marginTop:"2%"}}>
+                <div>
+                      <div id="outerDiv" className="work-div">
+                      {voiceNotes.map(audio => 
+                      <div className="card work-card" id={shortid.generate()}>
+                          <audio preload="auto" controls style={{width: '50%'}}>
+                            <source src={audio} />
+                          </audio>
+                          <FontAwesomeIcon icon={shareIcon} onClick={() => shareCard({audio})} 
+                          style={{float: 'right', 
+                          marginTop: "inherit", color:'#007bff', fontSize:'40px'}}/>
+                        </div>
+                      )}
+                      </div>
+                </div>
+              </div> )}
+          </div>
+          </div>
+          </div>
     )
 }
 
