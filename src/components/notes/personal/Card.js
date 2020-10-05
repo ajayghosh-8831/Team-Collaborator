@@ -5,13 +5,19 @@ import { connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import CardEditor from "./CardEditor";
 import  store  from "../../../store"
+import CommonMessage from '../../CommonMessage';
 
 class Card extends Component {
-  state = {
+  constructor(props) {
+    super(props);
+  this.state = {
     hover: false,
     editing: false,
     sharing:false,
+    message_type:'',
+    message_text:''
   };
+}
 
   startHover = () => this.setState({ hover: true });
   endHover = () => this.setState({ hover: false });
@@ -36,13 +42,14 @@ class Card extends Component {
       payload: { cardId: card._id, cardText: text }
     });
   };
-
+ 
   endSharing = () => this.setState({ hover: true, sharing: false });
+  shareCard =  async text => {  // We cac call Share API call here
+   
+   
+    const { card, dispatch,alert_mesaage } = this.props;
 
-  shareCard = async text => {  // We cac call Share API call here
-    const { card, dispatch } = this.props;
-    alert("card Id :"+card._id +" & "+"card Text :" +card.text )
-
+   
     await fetch('/create-note', {
       method: 'POST',
       headers: {
@@ -54,8 +61,14 @@ class Card extends Component {
         teamName: "Expedia",
         userId : store.getState().userProfile.userProf.name,
         userImg : store.getState().userProfile.userProf.imageUrl
-      })
+      })   
+    }).then( json => {
+      this.setState({message_type:"success",message_text:card.text+"  Shared successfully"});
+    })
+    .catch((error) => {
+      this.setState({message_type:"error",message_text:"Error occured in shred functionality"});
     });
+    
     this.endSharing();
   };
 
@@ -70,12 +83,12 @@ class Card extends Component {
 
 
   render() {
-  
     const { card, index } = this.props;
-    const { hover, editing,sharing } = this.state;
+    const { hover, editing,sharing,message_type,message_text } = this.state;
 
     if ((!editing && !sharing) ||(!editing && sharing)) {
       return (
+
         <Draggable draggableId={card._id} index={index}>
           {(provided, snapshot) => (
             <div
@@ -85,10 +98,11 @@ class Card extends Component {
               className="Card"
               onMouseEnter={this.startHover}
               onMouseLeave={this.endHover}
-            >
+            > 
+            
               {hover && (
                 <div className="Card-Icons">
-            
+          
                   <div className="Card-Icon" onClick={this.startEditing}>
                     <ion-icon name="create" /> </div>
                     <div className="Card-Icon" onClick={this.shareCard}  >
@@ -99,7 +113,7 @@ class Card extends Component {
                 </div>
               )}
       
-
+      {message_type!=""?<CommonMessage messageText={message_text} messagetype={message_type}/>:null}
               {card.text}
             </div>
           )}
