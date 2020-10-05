@@ -37,10 +37,16 @@ function App() {
     toggle();
   };
 
-  async function createUser(userDetails) {
+  function createUser(userDetails) {
     console.log("Creating user in DB "+userDetails.profileObj.name)
-    const response = await fetch('http://localhost:4000/user/'+userDetails.profileObj.name);
-    const data = await response.json();
+    fetch('/user/'+userDetails.profileObj.name)
+    .then(function(response) {
+      if (!response.ok) {
+          throw Error(response.statusText);
+      }
+      return response;})
+    .then(response => {console.log("user creation in DB is successfull")})
+    .catch(error => console.log("user creation failed"));
   }
 
   const onFailure = (res) => {

@@ -41,22 +41,37 @@ const Tab = (props) => {
     }
   }
 
-  async function callGetTeamName() {
-    var response = await fetch('/teams/'+userid);
-    let data = await response.json()
-    if(data.teams !== undefined){
-      console.log(data.teams[0])
-      setTeamName(data.teams[0]);
-      setWorkTabTitle("Work "+"("+data.teams[0]+")");
-    }
+  function callGetTeamName() {
+    fetch('/teams/'+userid)
+    .then(function(response) {
+      if (!response.ok) {
+          throw Error(response.statusText);
+      }
+      return response;})
+    .then(res => res.text())
+    .then(res => {
+      let data = JSON.parse(res);
+      if(data.teams !== undefined){
+        console.log(data.teams[0])
+        setTeamName(data.teams[0]);
+        setWorkTabTitle("Work "+"("+data.teams[0]+")");
+      } 
+    })
+    .catch(error => console.log("callGetTeamName failed"));
   }
 
-  async function addToTeam(team) {
-  const response = await fetch('/teams/'+userid+'/'+team);
-  const data = await response.json();
-  callGetTeamName(userid);
-  toggleModal();
-  setWorkTabTitle("Work "+"("+team+")");
+  function addToTeam(team) {
+   fetch('/teams/'+userid+'/'+team)
+   .then(function(response) {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;})
+   .then(res => console.log("Successfully added to the team "+team))
+   .catch(error => console.log("Adding to team failed")); 
+   callGetTeamName(userid);
+    toggleModal();
+    setWorkTabTitle("Work "+"("+team+")");
   }
 
   let activeMenu = props.activeMenu;
