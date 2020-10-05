@@ -3,7 +3,9 @@ import { Button,Modal,TabContent, TabPane, Nav, NavItem, NavLink,Row, Col,ModalH
   ModalFooter, Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
 import classnames from 'classnames';
 import PersonalContent from "./notes/PersonalContent"
+import PersonalLink from "./links/PersonalLink"
 import OrganizationContent from "./notes/OrganizationContent"
+import OrganizationLink from "./links/OrganizationLink"
 import VoiceNotes from './voice-notes/VoiceNotes';
 import WorkVoiceNotes from './voice-notes/WorkVoiceNotes';
 import store from "../store";
@@ -107,7 +109,7 @@ const Tab = (props) => {
           {activeMenu === "reminder" && <h1> Personal Reminders here </h1>}
           {activeMenu === "to-do" && <h1> Personal To-Do here </h1>}
           {activeMenu === "calendar" && <h1> Personal Calendar here </h1>}
-          {activeMenu === "links" && <h1> Personal Links here </h1>}
+          {activeMenu === "links" && <PersonalLink/>}
           </div>
           </Row>
         </TabPane>
@@ -119,7 +121,7 @@ const Tab = (props) => {
           {activeMenu === "reminder" && <h1> Work Reminders here </h1>}
           {activeMenu === "to-do" && <h1> Work To-Do here </h1>}
           {activeMenu === "calendar" && <h1> Work Calendar here </h1>}
-          {activeMenu === "links" && <h1> Work Links here </h1>}
+          {activeMenu === "links" && <OrganizationLink/>}
           </div>
           </Row>
         </TabPane>

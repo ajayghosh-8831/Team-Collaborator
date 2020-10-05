@@ -2,7 +2,7 @@ module.exports = (app) => {
     const links = require('../controllers/link.controllers.js');
 
 // Create a new Note
-app.post('/team-collaborator/userlinks', links.create);
+app.post('/create-link', links.createNewLink);
 
 app.get('/links', links.findAll);
 

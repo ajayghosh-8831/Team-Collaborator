@@ -11,7 +11,34 @@ exports.create = (req, res) => {
 }
 };
 
-exports.findAll = (req, res) => {
+exports.createNewLink = (req, res) => {
+    console.log("Creating the shared links in DB")
+
+    console.log("Creating links model")
+    // Create a Link
+    const link = new Link({
+        linkTitle: req.body.linkTitle || "Untitled Note", 
+        linkUrl: req.body.linkUrl,
+        isShared : req.body.isShared,
+        sharedWith : req.body.teamName,
+        sharedBy : req.body.userId,
+        sharedByUserImg : req.body.userImg
+    });
+
+    console.log("Created model")
+    console.log(link)
+    // Save Note in the database
+    link.save()
+    .then(data => {
+        res.send(data);
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message || "Some error occurred while creating the Link."
+        });
+    });
+};
+
+exports.findAll = async (req, res) => {
     Link.find()
   .then(links => {
     console.log("Fetching all links");
@@ -45,7 +72,7 @@ exports.findOne = (req, res) => {
 };
 
 
-// Delete a note with the specified noteId in the request
+// Delete a link with the specified linkId in the request
 exports.delete = (req, res) => {
   
     Link.findByIdAndRemove(req.params.id)
