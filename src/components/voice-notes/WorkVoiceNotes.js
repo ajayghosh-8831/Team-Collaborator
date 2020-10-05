@@ -17,7 +17,9 @@ const WorkVoiceNotes = () => {
       responeObj.forEach(data => {
         var base64Flag = 'data:audio/mp3;base64,';
         var audioStr = arrayBufferToBase64(data.data.data);
-        setVoiceNotes(voiceNotes => voiceNotes.concat(base64Flag+audioStr))
+        console.log(data.sharedByUserImg);
+        var notes = {audio:base64Flag+audioStr, userImg:data.sharedByUserImg};
+        setVoiceNotes(voiceNotes => voiceNotes.concat(notes))
         setIsLoading(false);
       });
     });
@@ -60,12 +62,12 @@ const WorkVoiceNotes = () => {
       <div className="container text-center" style={{marginTop:"2%"}}>
         <div>
               <div id="outerDiv" className="work-div">
-              {voiceNotes.map(audio => 
+              {voiceNotes.map(note => 
               <div className="card work-card" id={shortid.generate()}>
                   <audio preload="auto" controls style={{width: '50%'}}>
-                    <source src={audio} />
+                    <source src={note.audio} />
                   </audio>
-                  <img id="Avatar" alt="User Image" className="work-notes-img" src={""}/>
+                  <img id="Avatar" alt="User Image" className="work-notes-img" src={note.userImg}/>
                 </div>
               )}
               </div>

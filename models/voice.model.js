@@ -5,7 +5,8 @@ const VoiceSchema = mongoose.Schema({
     data: Buffer,
     sharedBy: String,
     sharedByUserImg: String,
-    sharedTo: String
+    sharedTo: String,
+    createdBy: String
 });
  
 module.exports = mongoose.model('Voice', VoiceSchema);

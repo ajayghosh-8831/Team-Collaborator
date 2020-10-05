@@ -86,6 +86,7 @@ const VoiceNotes = () => {
         var formData = new FormData();
         formData.append('myAudio', blob);
         formData.append('sharedBy', store.getState().userProfile.userProf.name);
+        formData.append('createdBy', store.getState().userProfile.userProf.name);
         formData.append('sharedByUserImg', store.getState().userProfile.userProf.imageUrl);
   
         fetch('/save-voice-notes', {

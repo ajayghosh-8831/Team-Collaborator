@@ -53,10 +53,9 @@ exports.saveUserVoiceNotes = (req, res) => {
           const voice = new Voice({
           type: 'mp3',
           data: mp3file,
-          sharedBy: req.body.sharedBy,
+          createdBy: req.body.createdBy,
           sharedByUserImg: req.body.sharedByUserImg,
           });
-
           voice.save()
           .then(console.log("success fully saved audio"));
     return res.status(200).send(req.file)
@@ -78,7 +77,7 @@ exports.getVoiceNotes = (req, res) => {
 
 exports.getUserVoiceNotes = (req, res) => {
   console.log("fetching voice notesss from DB")
-  Voice.find({sharedBy:req.params.userName})
+  Voice.find({createdBy:req.params.userName})
 .then(voice => {
     res.header('Content-Type', 'audio/mp3');
     res.send(voice);
