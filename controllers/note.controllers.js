@@ -11,35 +11,31 @@ exports.create = (req, res) => {
     });
 }
 else{
-    // User.save()
-    // .then(data => {
-    //     res.send(data);
-    // }).catch(err => {
-    //     res.status(500).send({
-    //         message: err.message || "Some error occurred while creating the User."
-    //     });
-    // });
-
-
     const note = new Note({
         noteTitle: req.body.title,
         noteDesc: req.body.desc
     });
-    
-    var noteid = note.save( (data , err, next) => {
-    var id = data._id;
-    return id;
-   })
+    note.save()
     .then(data => {
+        const user = new Note({
+            userid : req.body.userid,
+            notes : [data._id]
+        });
+        user.save()
+        .then(info => {
+            res.send(info);
+        }).catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while creating the Note."
+        });
+    });
         res.send(data);
     }).catch(err => {
         res.status(500).send({
             message: err.message || "Some error occurred while creating the Note."
         });
-    });
-    console.log(noteid);
-       
-    }
+    }); 
+}
 };
 
 exports.findAll = (req, res) => {
@@ -74,6 +70,22 @@ exports.findOne = (req, res) => {
       });
   });
 };
+
+exports.findnotes = (req,res) => {
+    Note.find(req.params.userid)
+    .then(note => {
+        res.send(note);
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            return res.status(404).send({
+                message: "User id not found " + req.params.userid
+            });                
+        }
+        return res.status(500).send({
+            message: "Some error occurred while retrieving notes" + req.params.userid
+        });
+    });
+}
 
 exports.updateNotes = (req,res) => {
     Note.findByIdAndUpdate(req.body.id,{
