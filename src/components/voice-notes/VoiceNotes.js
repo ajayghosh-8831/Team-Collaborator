@@ -35,8 +35,8 @@ const VoiceNotes = () => {
           lastModified: Date.now()
         });
         console.log("voice personal");
-        console.log(buffer);
-        setAudioElements(audioElements => audioElements.concat(URL.createObjectURL(file)))
+        let audioData = {"audio":URL.createObjectURL(file), "audioId":shortid.generate()}
+        setAudioElements(audioElements => audioElements.concat(audioData))
         setButtonText('Start recording');
         setButtonClass('btn btn-primary');
       }).catch((e) => {
@@ -64,9 +64,12 @@ const VoiceNotes = () => {
       .then(res => {
         let responeObj = JSON.parse(res);
         responeObj.forEach(data => {
+          console.log("fetching notes for personal");
+          console.log(data);
           var base64Flag = 'data:audio/mp3;base64,';
           var audioStr = arrayBufferToBase64(data.data.data);
-          setVoiceNotes(voiceNotes => voiceNotes.concat(base64Flag+audioStr))
+          let audioData = {"audio":base64Flag+audioStr, "audioId":data.audioId}
+          setVoiceNotes(voiceNotes => voiceNotes.concat(audioData))
           setIsLoading(false);
         });
       }).catch(console.log("No notes saved by user"));
@@ -81,12 +84,13 @@ const VoiceNotes = () => {
 
     
     
-    async function saveCard (audio) {
-        let blob = await fetch(audio.audio).then(r => r.blob());
+    async function saveCard (audioData) {
+        console.log(audioData.audioData.audioId)
+        let blob = await fetch(audioData.audioData.audio).then(r => r.blob());
         var formData = new FormData();
         formData.append('myAudio', blob);
-        formData.append('sharedBy', store.getState().userProfile.userProf.name);
         formData.append('createdBy', store.getState().userProfile.userProf.name);
+        formData.append('audioId', audioData.audioData.audioId);
         formData.append('sharedByUserImg', store.getState().userProfile.userProf.imageUrl);
   
         fetch('/save-voice-notes', {
@@ -100,13 +104,14 @@ const VoiceNotes = () => {
           
     };
 
-    async function shareCard (audio) {
+    async function shareCard (audioData) {
       if(shareIcon !== faCheckCircle){
-        let blob = await fetch(audio.audio).then(r => r.blob());
+        let blob = await fetch(audioData.audioData.audio).then(r => r.blob());
         var formData = new FormData();
         formData.append('myAudio', blob);
         formData.append('sharedBy', store.getState().userProfile.userProf.name);
         formData.append('sharedByUserImg', store.getState().userProfile.userProf.imageUrl);
+        formData.append('audioId', audioData.audioData.audioId);
         //Later we have to fetch the team neam probably have to used redux to store user's team
         formData.append('sharedTo', "Expedia");
   
@@ -128,15 +133,15 @@ const VoiceNotes = () => {
       <button id="recordBtn" className={buttonClass} onClick={() => clickHandler()}>{buttonText}</button>
         <div>
               <div id="outerDiv" className="work-div">
-              {audioElements.map(audio => 
+              {audioElements.map(audioData => 
               <div className="card work-card" id={shortid.generate()}>
                   <audio preload="auto" controls style={{width: '50%'}}>
-                    <source src={audio} />
+                    <source src={audioData.audio} />
                   </audio>
-                  <FontAwesomeIcon icon={shareIcon} onClick={() => shareCard({audio})} 
+                  <FontAwesomeIcon icon={shareIcon} onClick={() => shareCard({audioData})} 
                   style={{float: 'right', 
                   marginTop: "inherit", color:'#007bff', fontSize:'40px'}}/>
-                  <FontAwesomeIcon icon={faSave} onClick={() => saveCard({audio})} 
+                  <FontAwesomeIcon icon={faSave} onClick={() => saveCard({audioData})} 
                   style={{float: 'left', 
                   marginTop: "inherit", color:'#007bff', fontSize:'40px'}}/>
                 </div>
@@ -172,12 +177,12 @@ const VoiceNotes = () => {
               <div className="container text-center" style={{marginTop:"2%"}}>
                 <div>
                       <div id="outerDiv" className="work-div">
-                      {voiceNotes.map(audio => 
-                      <div className="card work-card" id={shortid.generate()}>
+                      {voiceNotes.map(audioData => 
+                      <div className="card work-card">
                           <audio preload="auto" controls style={{width: '50%'}}>
-                            <source src={audio} />
+                            <source src={audioData.audio} />
                           </audio>
-                          <FontAwesomeIcon icon={shareIcon} onClick={() => shareCard({audio})} 
+                          <FontAwesomeIcon icon={shareIcon} onClick={() => shareCard({audioData})} 
                           style={{float: 'right', 
                           marginTop: "inherit", color:'#007bff', fontSize:'40px'}}/>
                         </div>

@@ -24,17 +24,36 @@ exports.createVoiceNote = (req, res) => {
 
                 var mp3file = fs.readFileSync(req.file.path);
     
+                console.log("audio id received "+req.body.audioId,)
                 // Create an Voice instance
                 const voice = new Voice({
                 type: 'mp3',
                 data: mp3file,
-                sharedBy: req.body.sharedBy,
                 sharedByUserImg: req.body.sharedByUserImg,
-                sharedTo: req.body.sharedTo
+                sharedTo: req.body.sharedTo,
+                audioId: req.body.audioId,
+                sharedBy: req.body.sharedBy,
+                createdBy: req.body.sharedBy
                 });
-
-                voice.save()
-                .then(console.log("success fully saved audio"));
+                
+                Voice.exists({audioId: req.body.audioId}, function (err, res){
+                  console.log("exists"+res)
+                  if(!res){
+                    console.log("Audio not found so inserting")
+                    voice.save();
+                  }else{
+                    console.log("Audio found so updating")
+                    Voice.updateOne(
+                      { audioId: req.body.audioId },
+                      { sharedBy: req.body.sharedBy, sharedTo: req.body.sharedTo },
+                      function (err, doc){
+                        if(err){
+                          console.log("Updating sharedBy failed");
+                        }
+                      });
+                  }
+                })
+            
           return res.status(200).send(req.file)
         })
 };
@@ -48,13 +67,14 @@ exports.saveUserVoiceNotes = (req, res) => {
          }
 
           var mp3file = fs.readFileSync(req.file.path);
-
+          console.log(req.body.audioId);
           // Create an Voice instance
           const voice = new Voice({
           type: 'mp3',
           data: mp3file,
           createdBy: req.body.createdBy,
           sharedByUserImg: req.body.sharedByUserImg,
+          audioId: req.body.audioId,
           });
           voice.save()
           .then(console.log("success fully saved audio"));
