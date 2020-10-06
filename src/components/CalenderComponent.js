@@ -137,10 +137,8 @@ class Calender extends Component {
 
     let emptyState = (
       <div className="empty">
-        <img src={welcomeImage} alt="Welcome" />
         <h3>
-          No meetings are scheduled for the day. Create one by clicking the
-          button below.
+          No meetings are scheduled for the day.
         </h3>
       </div>
     );
@@ -158,7 +156,7 @@ class Calender extends Component {
             this.state.isBusy ? "current-status busy" : "current-status open"
           }
         >
-          <h1>{this.state.isBusy ? "BUSY" : "OPEN"}</h1>
+          <h1>{this.state.isBusy ? "BUSY" : "FREE"}</h1>
         </div>
         <div className="upcoming-meetings">
           <div className="current-time">{time}, 2018</div>
@@ -168,13 +166,6 @@ class Calender extends Component {
             {events.length > 0 && eventsList}
             {this.state.isEmpty && emptyState}
           </div>
-          <a
-            className="primary-cta"
-            href="https://calendar.google.com/calendar?cid=c3FtMnVkaTFhZGY2ZHM3Z2o5aDgxdHVldDhAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ"
-            target="_blank"
-          >
-            +
-          </a>
         </div>
       </div>
     );

@@ -77,6 +77,7 @@ function App() {
           cookiePolicy={'single_host_origin'}
           style={{ marginTop: '100px' }}
           isSignedIn={true}
+          scope={'https://www.googleapis.com/auth/calendar.readonly'}
         />
         </ModalFooter>
       </Modal>

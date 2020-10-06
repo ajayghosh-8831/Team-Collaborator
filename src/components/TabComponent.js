@@ -8,7 +8,9 @@ import OrganizationContent from "./notes/OrganizationContent"
 import OrganizationLink from "./links/OrganizationLink"
 import VoiceNotes from './voice-notes/VoiceNotes';
 import WorkVoiceNotes from './voice-notes/WorkVoiceNotes';
+import Calendar from './CalenderComponent';
 import store from "../store";
+import Calender from './CalenderComponent';
 
 const Tab = (props) => {
   const userid = store.getState().userProfile.userProf.name;
@@ -108,7 +110,7 @@ const Tab = (props) => {
           {activeMenu === "voice-notes" && <VoiceNotes />}
           {activeMenu === "reminder" && <h1> Personal Reminders here </h1>}
           {activeMenu === "to-do" && <h1> Personal To-Do here </h1>}
-          {activeMenu === "calendar" && <h1> Personal Calendar here </h1>}
+          {activeMenu === "calendar" && <Calender />}
           {activeMenu === "links" && <PersonalLink/>}
           </div>
           </Row>
@@ -120,7 +122,7 @@ const Tab = (props) => {
           {activeMenu === "voice-notes" && <WorkVoiceNotes />}
           {activeMenu === "reminder" && <h1> Work Reminders here </h1>}
           {activeMenu === "to-do" && <h1> Work To-Do here </h1>}
-          {activeMenu === "calendar" && <h1> Work Calendar here </h1>}
+          {activeMenu === "calendar" && <Calender />}
           {activeMenu === "links" && <OrganizationLink/>}
           </div>
           </Row>
