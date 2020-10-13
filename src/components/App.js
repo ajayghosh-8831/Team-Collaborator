@@ -1,10 +1,8 @@
 import "../styles/App.css";
 
-import React, { Component, useState } from "react";
-import SideBar from './SideBar';
+import React, { useState } from "react";
 import Header from './HeaderComponent';
-import Tab from  './TabComponent';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {GoogleLogin} from 'react-google-login';
 import store from "../store";
 
@@ -14,20 +12,14 @@ const clientId= "365890450292-2cpvutu0t85nbale2sdhqp87r949ifv7.apps.googleuserco
 
 
 function App() {
-  // Declare a new state variable, which we'll call "count"
   
   const [menuItem, setActiveMenu] = useState("notes");
   const [modal, setModal] = useState(true);
-  //const [backdrop, setBackdrop] = useState(false);
-  //const [keyboard, setKeyboard] = useState(false);
 
   const toggle = () => setModal(!modal);
 
   const onSuccess = (res) => {
     console.log('Login Success: currentUser:', res.profileObj);
-    /*alert(
-      `Logged in successfully welcome ${res.profileObj.name} 😍. \n See console for full profile object.`
-    );*/
     refreshTokenSetup(res);
     store.dispatch({
       type: "USER_LOGIN",
@@ -51,18 +43,11 @@ function App() {
 
   const onFailure = (res) => {
     console.log('Login failed: res:', res);
-    /*alert(
-      `Failed to login. 😢 Please ping this to repo owner twitter.com/sivanesh_fiz`
-    );*/
-    
   };
 
   return (
-    <div>
-      <div id="mainContent">
+    <div id="outer-container">
       <Header menuItem={menuItem}/>
-      <SideBar setActiveMenu={setActiveMenu}/>
-      </div>
       <Modal isOpen={modal} toggle={toggle} backdrop={false} keyboard={false} fade={false}>
         <ModalHeader>Login with Google</ModalHeader>
         <ModalBody>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button,Modal,TabContent, TabPane, Nav, NavItem, NavLink,Row, Col,ModalHeader, ModalBody, 
   ModalFooter, Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
 import classnames from 'classnames';
@@ -19,7 +19,7 @@ const Tab = (props) => {
   const [teamName, setTeamName] = useState(callGetTeamName());
   const [workTabTitle, setWorkTabTitle] = useState('Work');
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const [tabEnabled, setTabEnabled] = useState(true);
   const toggleDropDown = () => setDropdownOpen(prevState => !prevState);
  
   const [modal, setModal] = useState(false);
@@ -79,8 +79,17 @@ const Tab = (props) => {
   }
 
   let activeMenu = props.activeMenu;
-  console.log("######### activeMenu ####");
-  console.log(activeMenu);
+  
+  useEffect(() => {
+    if(props.activeMenu === "calendar"
+    || props.activeMenu === "to-do"){
+      setTabEnabled(false);
+      console.log("tabEnabled "+tabEnabled);
+    }else{
+      setTabEnabled(true);
+    }
+  }, [props.activeMenu]);
+  
 
   return (
     <div>
@@ -93,6 +102,7 @@ const Tab = (props) => {
             Personal
           </NavLink>
         </NavItem>
+        {tabEnabled &&
         <NavItem>
           <NavLink
             className={classnames({ active: activeTab === '2' })}
@@ -100,12 +110,12 @@ const Tab = (props) => {
           >
             {workTabTitle}
           </NavLink>
-        </NavItem>
+        </NavItem>}
       </Nav>
       <TabContent activeTab={activeTab}>
         <TabPane tabId="1">
           <Row>
-          <div style={{ width: "100%"}}>
+          <div style={{ width: "100%", marginLeft:"3%"}}>
           {activeMenu === "notes" && <PersonalContent/>}
           {activeMenu === "voice-notes" && <VoiceNotes />}
           {activeMenu === "reminder" && <h1> Personal Reminders here </h1>}
@@ -115,9 +125,9 @@ const Tab = (props) => {
           </div>
           </Row>
         </TabPane>
-        <TabPane tabId="2">
+        <TabPane tabId="2" >
           <Row>
-          <div style={{ width: "100%"}}>
+          <div style={{ width: "100%", marginLeft:"3%"}}>
           {activeMenu === "notes" && <OrganizationContent/>}
           {activeMenu === "voice-notes" && <WorkVoiceNotes />}
           {activeMenu === "reminder" && <h1> Work Reminders here </h1>}

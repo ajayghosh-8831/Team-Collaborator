@@ -1,55 +1,43 @@
-import React, { Component, useState} from 'react';
 import { faAlignJustify,faCalendarDay,faLink,faMicrophone,faBell,faTasks } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Container,Col,Row, ListGroup, ListGroupItem} from 'reactstrap';
-
+import { slide as Menu } from 'react-burger-menu'
+import React, { useState, useContext } from 'react'
+import "../styles/App.css";
 
 function SideBar(props) {
+    const [menuOpen, setMenuOpen] = useState(false)
 
     function setActiveMenu(event) {
-        // Here, we invoke the callback with the new value
         props.setActiveMenu(event);
     }
 
         return (
-            <span>
-                <Col id="Menu" md="2">
-                <span className="navLabel">Pick your tool here</span>
-                <hr/>
-                <ListGroup>
-                    <Row>
-                    <ListGroupItem active tag="button" onClick={() => setActiveMenu("notes")}>
-                    <FontAwesomeIcon icon={faAlignJustify} size ="2x"/>
-                    <span className="navLabel">Notes</span>
-                    </ListGroupItem>
-                    </Row>
-                    <Row>
-                    <ListGroupItem tag="button" onClick={() => setActiveMenu("links")}>
-                    <FontAwesomeIcon icon={faLink} size ="2x"/>
-                    <span className="navLabel">Links</span>
-                    </ListGroupItem>
-                    </Row>
-                    <Row>
-                    <ListGroupItem tag="button" onClick={() => setActiveMenu("voice-notes")}>
-                    <FontAwesomeIcon icon={faMicrophone} size ="2x"/>
-                    <span className="navLabel">Voice Notes</span>
-                    </ListGroupItem>
-                    </Row>
-                    <Row>
-                    <ListGroupItem tag="button" onClick={() => setActiveMenu("calendar")}>
-                    <FontAwesomeIcon icon={faCalendarDay} size ="2x"/>
-                    <span className="navLabel">Calender</span>
-                    </ListGroupItem>
-                    </Row>
-                    <Row>
-                    <ListGroupItem tag="button" onClick={() => setActiveMenu("to-do")}>
-                    <FontAwesomeIcon icon={faTasks} size ="2x"/>
-                    <span className="navLabel">To Do</span>
-                    </ListGroupItem>
-                    </Row>
-                </ListGroup>
-                </Col>
-            </span>
+                <Menu isOpen={false} itemListElement="div">
+                    <div id="notes"  onClick={() => setActiveMenu("notes")}>
+                    <FontAwesomeIcon className="menu-icon" icon={faAlignJustify} size ="2x"/>
+                        Notes
+                    </div>
+                    <hr/>
+                    <div id="voice-notes" className="menu-item" onClick={() => setActiveMenu("voice-notes")}>
+                    <FontAwesomeIcon className="menu-icon" icon={faMicrophone} size ="2x"/>
+                        Voice Notes
+                    </div>
+                    <hr/>
+                    <div id="links" className="menu-item" onClick={() => setActiveMenu("links")}>
+                    <FontAwesomeIcon  className="menu-icon" icon={faLink} size ="2x"/>
+                        Links
+                    </div>
+                    <hr/>
+                    <div id="calendar" className="menu-item" onClick={() => setActiveMenu("calendar")}>
+                    <FontAwesomeIcon className="menu-icon" icon={faCalendarDay} size ="2x"/>
+                        Calender
+                    </div>
+                    <hr/>
+                    <div id="to-do" className="menu-item" onClick={() => setActiveMenu("to-do")}>
+                    <FontAwesomeIcon className="menu-icon" icon={faTasks} size ="2x"/>
+                        To Do
+                    </div>
+                </Menu>
         )
 }
 
