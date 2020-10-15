@@ -5,6 +5,7 @@ import Header from './HeaderComponent';
 import { Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {GoogleLogin} from 'react-google-login';
 import store from "../store";
+import SideBar from './SideBar';
 
 import { refreshTokenSetup } from '../utils/refreshToken';
 
@@ -48,6 +49,7 @@ function App() {
   return (
     <div id="outer-container">
       <Header menuItem={menuItem}/>
+      <SideBar setActiveMenu={setActiveMenu}/>
       <Modal isOpen={modal} toggle={toggle} backdrop={false} keyboard={false} fade={false}>
         <ModalHeader>Login with Google</ModalHeader>
         <ModalBody>
