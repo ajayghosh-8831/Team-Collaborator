@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import List from "./List";
 import AddList from "./AddList";
+import SavedCards from "./SavedCardsBoard";
 
 class Board extends Component {
   state = {
@@ -57,7 +58,7 @@ class Board extends Component {
     const { addingList } = this.state;
 
     return (
-      
+      <div>
       <DragDropContext onDragEnd={this.handleDragEnd}>
         <Droppable droppableId="board" direction="horizontal" type="COLUMN">
           {(provided, _snapshot) => (
@@ -67,23 +68,13 @@ class Board extends Component {
               })}
 
               {provided.placeholder}
-
-              <div className="Add-List" style={{visibility:"hidden"}}>
-                {addingList ? (
-                  <AddList toggleAddingList={this.toggleAddingList} />
-                ) : (
-                  <div
-                    onClick={this.toggleAddingList}
-                    className="Add-List-Button"
-                  >
-                    <ion-icon name="add" /> Add a list
-                  </div>
-                )}
-              </div>
             </div>
           )}
         </Droppable>
       </DragDropContext>
+      <h1 style={{textAlign: 'center'}}>Your saved cards</h1>
+      <SavedCards />
+      </div>
     );
   }
 }

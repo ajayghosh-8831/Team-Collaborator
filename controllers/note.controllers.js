@@ -28,6 +28,47 @@ exports.createNewNote = (req, res) => {
     console.log("Created model")
     console.log(note)
     // Save Note in the database
+
+    Note.exists({noteTitle: req.body.noteTitle}, function (err, res){
+        console.log("exists"+res)
+        if(!res){
+          console.log("Audio not found so inserting")
+          note.save();
+        }else{
+          console.log("Audio found so updating")
+          Note.updateOne(
+            { noteTitle: req.body.noteTitle },
+            { sharedBy: req.body.userId, 
+                sharedWith: req.body.teamName,
+                sharedByUserImg: req.body.userImg,
+                isShared : req.body.isShared},
+            function (err, doc){
+              if(err){
+                console.log("Updating sharedBy failed");
+                res.status(500).send({
+                    message: err.message || "Some error occurred while creating the Note."
+                });
+              }
+            });
+        }
+      })
+};
+
+exports.createNewUserNote = (req, res) => {
+    console.log("Creating the shared notes in DB")
+
+    console.log("Creating notes model")
+    // Create a Note
+    const note = new Note({
+        noteTitle: req.body.noteTitle || "Untitled Note", 
+        noteDesc: req.body.noteDesc,
+        isShared : req.body.isShared,
+        createdBy : req.body.userId,
+    });
+
+    console.log("Created model")
+    console.log(note)
+    // Save Note in the database
     note.save()
     .then(data => {
         res.send(data);
@@ -37,6 +78,7 @@ exports.createNewNote = (req, res) => {
         });
     });
 };
+
 
 exports.findAll = async (req, res) => {
     Note.find()
@@ -49,6 +91,30 @@ exports.findAll = async (req, res) => {
       });
   });
 };
+
+exports.getUserNotes = (req, res) => {
+    console.log("fetching user notesss from DB")
+    Note.find({createdBy:req.params.userId})
+  .then(notes => {
+      res.send(notes);
+  }).catch(err => {
+      res.status(500).send({
+          message: err.message || "Some error occurred while retrieving user."
+      });
+  });
+  };
+
+  exports.getTeamNotes = (req, res) => {
+    console.log("fetching team notes from DB")
+    Note.find({sharedWith:req.params.teamName})
+  .then(notes => {
+      res.send(notes);
+  }).catch(err => {
+      res.status(500).send({
+          message: err.message || "Some error occurred while retrieving user."
+      });
+  });
+  };
 
 exports.findOne = (req, res) => {
     Note.findById(req.params.id)

@@ -27,32 +27,6 @@ export default store => {
     }
   });
 
-  console.log("Insert second list");
-  const secondListId = shortid.generate();
-
-  store.dispatch({
-    type: "ADD_LIST",
-    payload: { listId: secondListId, listTitle: "Second list" }
-  });
-
-  store.dispatch({
-    type: "ADD_CARD",
-    payload: {
-      listId: secondListId,
-      cardId: shortid.generate(),
-      cardText: "Card 1"
-    }
-  });
-
-  store.dispatch({
-    type: "ADD_CARD",
-    payload: {
-      listId: secondListId,
-      cardId: shortid.generate(),
-      cardText: "Card 2"
-    }
-  });
-
   store.dispatch({
     type:"USER_LOGIN",
     payload:{
@@ -61,4 +35,5 @@ export default store => {
       imageUrl:"https://www.w3schools.com/howto/img_avatar2.png"
     }
   });
+
 };

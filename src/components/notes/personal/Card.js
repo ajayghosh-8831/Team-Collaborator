@@ -72,6 +72,30 @@ class Card extends Component {
     this.endSharing();
   };
 
+  saveCard =  async text => {  // We cac call Share API call here
+    const { card } = this.props;
+
+    await fetch('/create-user-note', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        {noteTitle: card._id, 
+        noteDesc: card.text, 
+        isShared: false, 
+        userId : store.getState().userProfile.userProf.name,
+        })   
+    }).then( json => {
+      this.setState({message_type:"success",message_text:"Saved successfully"});
+    })
+    .catch((error) => {
+      this.setState({message_type:"error",message_text:"Error occured in while saving notes"});
+    });    
+    this.endSharing();
+  };
+
   deleteCard = async () => {
     const { listId, card, dispatch } = this.props;
 
@@ -88,7 +112,6 @@ class Card extends Component {
 
     if ((!editing && !sharing) ||(!editing && sharing)) {
       return (
-
         <Draggable draggableId={card._id} index={index}>
           {(provided, snapshot) => (
             <div
@@ -102,15 +125,13 @@ class Card extends Component {
             
               {hover && (
                 <div className="Card-Icons">
-          
                   <div className="Card-Icon" onClick={this.startEditing}>
                     <ion-icon name="create" /> </div>
-                    <div className="Card-Icon" onClick={this.shareCard}  >
-                    <ion-icon ios="ios-share" md="md-share"></ion-icon>
-                 
+                    <div className="Card-Icon" onClick={this.shareCard}>
+                    <ion-icon name="share" /> </div>
+                    <div className="Card-Icon" onClick={this.saveCard}>
+                    <ion-icon name="save" /> </div>
                   </div>
-               
-                </div>
               )}
       
       {message_type!=""?<CommonMessage messageText={message_text} messagetype={message_type}/>:null}
@@ -119,7 +140,6 @@ class Card extends Component {
           )}
         </Draggable>
       );
-     
     } 
      if(!sharing && editing)
      {
@@ -132,7 +152,6 @@ class Card extends Component {
         />
       );
     }
-   
   }
 
 }

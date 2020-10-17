@@ -1,18 +1,28 @@
 import { faAlignJustify,faCalendarDay,faLink,faMicrophone,faBell,faTasks } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { slide as Menu } from 'react-burger-menu'
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import "../styles/App.css";
 
 function SideBar(props) {
-    const [menuOpen, setMenuOpen] = useState(false)
+    const [isOpened, setIsOpened] = useState(false)
 
     function setActiveMenu(event) {
+        if(isOpened){
+            setIsOpened(false);
+        }else{
+            setIsOpened(true);
+        }
         props.setActiveMenu(event);
+        console.log(props);
     }
 
+    useEffect(() => {
+        setIsOpened(false);
+      }, [isOpened]);
+
         return (
-                <Menu isOpen={false} itemListElement="div">
+                <Menu isOpen={isOpened} itemListElement="div">
                     <div id="notes"  onClick={() => setActiveMenu("notes")}>
                     <FontAwesomeIcon className="menu-icon" icon={faAlignJustify} size ="2x"/>
                         Notes

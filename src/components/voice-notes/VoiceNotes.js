@@ -18,6 +18,7 @@ const VoiceNotes = () => {
     const [audioElements, setAudioElements] = useState([]);
     const [voiceNotes, setVoiceNotes] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [saved, setSaved] = useState();
 
     function startRecording() {
       recorder.start().then(() => {
@@ -54,7 +55,7 @@ const VoiceNotes = () => {
 
     useEffect(() => {
       setIsLoading(true);
-      fetch('/fetch-user-notes/'+store.getState().userProfile.userProf.name)
+      fetch('/fetch-user-voice-notes/'+store.getState().userProfile.userProf.name)
       .then(function(response) {
         if (!response.ok) {
             throw Error(response.statusText);
@@ -64,7 +65,7 @@ const VoiceNotes = () => {
       .then(res => {
         let responeObj = JSON.parse(res);
         responeObj.forEach(data => {
-          console.log("fetching notes for personal");
+          console.log("fetching voice notes for personal");
           console.log(data);
           var base64Flag = 'data:audio/mp3;base64,';
           var audioStr = arrayBufferToBase64(data.data.data);
@@ -97,6 +98,7 @@ const VoiceNotes = () => {
           method: "POST", body: formData
           }).then(response => response.json())
           .then(success => {
+            setSaved(true);
             alert("saved successfully");
           })
           .catch(error => {console.log(error); alert("failed")}

@@ -13,7 +13,9 @@ import store from "../store";
 import Calender from './CalenderComponent';
 
 const Tab = (props) => {
-  const userid = store.getState().userProfile.userProf.name;
+  let user = store.getState().userProfile;
+  //const userid = store.getState().userProfile.userProf.name;
+  const userid = (undefined !== user)?user.userProf.name:"";
 
   const [activeTab, setActiveTab] = useState('1');
   const [teamName, setTeamName] = useState(callGetTeamName());

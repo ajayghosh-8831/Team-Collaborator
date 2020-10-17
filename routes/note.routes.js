@@ -4,14 +4,16 @@ module.exports = (app) => {
 // Create a new Note
 app.post('/create-note', notes.createNewNote);
 
-app.get('/notes', notes.findAll);
+app.get('/fetch-team-notes/:teamName', notes.getTeamNotes);
 
-app.get('/', (req, res) => {
-    res.json({"message": "Welcome to EasyNotes application. Take notes quickly. Organize and keep track of all your notes."});
-});
+//Save a single Note for user
+app.post('/create-user-note', notes.createNewUserNote);
 
 //Retrieve a single Note with noteId
 app.get('/notes/:noteId', notes.findOne);
+
+//Retrieve Notes for the user
+app.get('/fetch-user-saved-notes/:userId', notes.getUserNotes);
 
 //Update a Note with noteId
 //app.put('/notes/:noteId', notes.update);
