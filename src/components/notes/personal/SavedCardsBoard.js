@@ -5,11 +5,13 @@ import Skeleton from '@yisheng90/react-loading';
 import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import  store  from "../../../store"
+import { useSelector } from "react-redux";
 
-const Board = () => {
+const Board = (props) => {
 
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const cards = useSelector(state => state.cardsById);
 
   function sharedCard(note){
     console.log(note);
@@ -29,12 +31,14 @@ const Board = () => {
           console.log("Successfully shared notes")
         })
         .catch((error) => {
-          console.log("errot while sharing notes")
+          console.log("error while sharing notes")
         });
   };
 
 
   useEffect(() => {
+    console.log("cardsById from store");
+    console.log(Object.keys(cards).length);
     setIsLoading(true);
     fetch('/fetch-user-saved-notes/'+store.getState().userProfile.userProf.name)
     .then(res => res.text())
@@ -42,8 +46,8 @@ const Board = () => {
       let notesObj = JSON.parse(res);
       setNotes(notesObj);
       setIsLoading(false);
-    });
-  }, [1]);
+    }).catch((error)=> console.log(error));
+  }, [cards]);
   //{isLoading && <Skeleton width={250} row={6} />}
   return (  
   <div>

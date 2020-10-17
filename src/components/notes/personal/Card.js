@@ -72,9 +72,9 @@ class Card extends Component {
     this.endSharing();
   };
 
-  saveCard =  async text => {  // We cac call Share API call here
-    const { card } = this.props;
-
+  saveCard =  async () => {  // We cac call Share API call here
+    const { listId, card, dispatch } = this.props;
+    
     await fetch('/create-user-note', {
       method: 'POST',
       headers: {
@@ -92,8 +92,12 @@ class Card extends Component {
     })
     .catch((error) => {
       this.setState({message_type:"error",message_text:"Error occured in while saving notes"});
-    });    
+    });
     this.endSharing();
+    dispatch({
+      type: "DELETE_CARD",
+      payload: { cardId: card._id, listId }
+    });
   };
 
   deleteCard = async () => {

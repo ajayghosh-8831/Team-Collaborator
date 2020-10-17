@@ -16,8 +16,13 @@ const Board = () => {
       let notesObj = JSON.parse(res);
       setNotes(notesObj);
       setIsLoading(false);
+    }).then( json => {
+      console.log("Successfully shared notes")
+    })
+    .catch((error) => {
+      console.log("error while sharing notes")
     });
-  }, [1]);
+  }, []);
   //{isLoading && <Skeleton width={250} row={6} />}
   return (  
   <div>

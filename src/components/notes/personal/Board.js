@@ -4,7 +4,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import List from "./List";
-import AddList from "./AddList";
 import SavedCards from "./SavedCardsBoard";
 
 class Board extends Component {
@@ -72,8 +71,8 @@ class Board extends Component {
           )}
         </Droppable>
       </DragDropContext>
-      <h1 style={{textAlign: 'center'}}>Your saved cards</h1>
-      <SavedCards />
+      <h1 style={{textAlign: 'center'}}>Your saved notes</h1>
+      <SavedCards state={this.state}/>
       </div>
     );
   }
