@@ -10,14 +10,19 @@ const Board = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch('http://localhost:4000/links')
+    fetch('/fetch-team-links/Expedia')
     .then(res => res.text())
     .then(res => {
       let linksObj = JSON.parse(res);
       setLinks(linksObj);
       setIsLoading(false);
+    }).then( json => {
+      console.log("Successfully shared links")
+    })
+    .catch((error) => {
+      console.log("error while sharing links")
     });
-  }, [1]);
+  }, []);
   //{isLoading && <Skeleton width={250} row={6} />}
   return (  
   <div>

@@ -17,7 +17,7 @@ exports.createNewLink = (req, res) => {
     console.log("Creating links model")
     // Create a Link
     const link = new Link({
-        linkTitle: req.body.linkTitle || "Untitled Note", 
+        linkTitle: req.body.linkTitle || "Untitled Link", 
         linkUrl: req.body.linkUrl,
         isShared : req.body.isShared,
         sharedWith : req.body.teamName,
@@ -27,7 +27,50 @@ exports.createNewLink = (req, res) => {
 
     console.log("Created model")
     console.log(link)
-    // Save Note in the database
+    // Save Link in the database
+    
+    Link.exists({linkTitle: req.body.linkTitle} ,function(err,res){
+        console.log("exists"+res)
+        if(!res){
+            console.log("Link not found so inserting")
+            link.save();
+        }else{
+            console.log("Link found so updating")
+            Link.updateOne(
+                {linkTitle: req.body.linkTitle},
+                { sharedBy: req.body.userId, 
+                    sharedWith: req.body.teamName,
+                    sharedByUserImg: req.body.userImg,
+                    isShared : req.body.isShared},
+                function (err, doc){
+                    if(err){
+                        console.log("Updating sharedBy failed");
+                        res.status(500).send({
+                          message: err.message || "Some error occurred while creating the Link."
+                        });
+                    }
+                });
+        }
+    })
+
+    
+};
+
+exports.createNewUserLink = (req, res) => {
+    console.log("Creating the shared links in DB")
+
+    console.log("Creating links model")
+    // Create a Note
+    const link = new Link({
+        linkTitle: req.body.linkTitle || "Untitled Link", 
+        linkUrl: req.body.linkUrl,
+        isShared : req.body.isShared,
+        createdBy : req.body.userId,
+    });
+
+    console.log("Created model")
+    console.log(link)
+    // Save link in the database
     link.save()
     .then(data => {
         res.send(data);
@@ -49,6 +92,30 @@ exports.findAll = async (req, res) => {
       });
   });
 };
+
+exports.getUserLinks = (req, res) => {
+    console.log("fetching user links from DB")
+    Link.find({createdBy:req.params.userId})
+  .then(links => {
+      res.send(links);
+  }).catch(err => {
+      res.status(500).send({
+          message: err.message || "Some error occurred while retrieving user links."
+      });
+  });
+  };
+
+  exports.getTeamLinks = (req, res) => {
+    console.log("fetching team links from DB")
+    Link.find({sharedWith:req.params.teamName})
+  .then(links => {
+      res.send(links);
+  }).catch(err => {
+      res.status(500).send({
+          message: err.message || "Some error occurred while retrieving shared links."
+      });
+  });
+  };
 
 exports.findOne = (req, res) => {
     Link.findById(req.params.id)

@@ -66,7 +66,7 @@ class Card extends Component {
       this.setState({message_type:"success",message_text:card.text+"  Shared successfully"});
     })
     .catch((error) => {
-      this.setState({message_type:"error",message_text:"Error occured in shred functionality"});
+      this.setState({message_type:"error",message_text:"Error occured in shared functionality"});
     });
     
     this.endSharing();

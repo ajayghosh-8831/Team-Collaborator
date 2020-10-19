@@ -32,10 +32,10 @@ exports.createNewNote = (req, res) => {
     Note.exists({noteTitle: req.body.noteTitle}, function (err, res){
         console.log("exists"+res)
         if(!res){
-          console.log("Audio not found so inserting")
+          console.log("Note not found so inserting")
           note.save();
         }else{
-          console.log("Audio found so updating")
+          console.log("Note found so updating")
           Note.updateOne(
             { noteTitle: req.body.noteTitle },
             { sharedBy: req.body.userId, 
@@ -83,7 +83,7 @@ exports.createNewUserNote = (req, res) => {
 exports.findAll = async (req, res) => {
     Note.find()
   .then(notes => {
-    console.log("Fecthing all notes");
+    console.log("Fetching all notes");
       res.send(notes);
   }).catch(err => {
       res.status(500).send({
@@ -93,13 +93,13 @@ exports.findAll = async (req, res) => {
 };
 
 exports.getUserNotes = (req, res) => {
-    console.log("fetching user notesss from DB")
+    console.log("fetching user notes from DB")
     Note.find({createdBy:req.params.userId})
   .then(notes => {
       res.send(notes);
   }).catch(err => {
       res.status(500).send({
-          message: err.message || "Some error occurred while retrieving user."
+          message: err.message || "Some error occurred while retrieving user notes."
       });
   });
   };
@@ -111,7 +111,7 @@ exports.getUserNotes = (req, res) => {
       res.send(notes);
   }).catch(err => {
       res.status(500).send({
-          message: err.message || "Some error occurred while retrieving user."
+          message: err.message || "Some error occurred while retrieving shared notes."
       });
   });
   };

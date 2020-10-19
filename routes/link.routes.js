@@ -1,22 +1,24 @@
 module.exports = (app) => {
     const links = require('../controllers/link.controllers.js');
 
-// Create a new Note
+// Create a new Link
 app.post('/create-link', links.createNewLink);
 
-app.get('/links', links.findAll);
+app.get('/fetch-team-links/:teamName', links.getTeamLinks);
 
-app.get('/', (req, res) => {
-    res.json({"message": "Welcome to EasyLinks application. Note links quickly. Organize and keep track of all your links."});
-});
+//Save a single Link for user
+app.post('/create-user-link', links.createNewUserLink);
 
-//Retrieve a single Note with noteId
+//Retrieve a single Link with linkId
 app.get('/links/:linkId', links.findOne);
 
-//Update a Link with linkId
-//app.put('/notes/:noteId', links.update);
+//Retrieve Links for the user
+app.get('/fetch-user-saved-links/:userId', links.getUserLinks);
 
-//Delete a Note with noteId
+//Update a Link with linkId
+//app.put('/links/:linkId', links.update);
+
+//Delete a Link with linkId
 app.delete('/links/:linkId', links.delete);
 
 }
