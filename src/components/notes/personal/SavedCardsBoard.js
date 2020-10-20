@@ -30,11 +30,11 @@ const errorOptions = {
 };
 
 export function SuccessIcon() {
-  return <Lottie style={{float: 'right'}} options={defaultOptions} height={60} width={60} />;
+  return <Lottie style={{marginRight: "0%"}} options={defaultOptions} height={55} width={55} />;
 }
 
 export function ErrorIcon() {
-  return <Lottie style={{float: 'right'}} options={errorOptions} height={60} width={60} />;
+  return <Lottie style={{marginRight: "0%"}} options={errorOptions} height={55} width={55} />;
 } 
 
 const Board = (props) => {
@@ -70,7 +70,7 @@ const Board = (props) => {
           console.log("Successfully shared notes "+responseJson )
         })
         .catch((error) => {
-          let errorId = divIndex.index+"errorAni";
+          let errorId = divIndex.index+"confetti";
           ReactDOM.render(<ErrorIcon />, document.getElementById(errorId));
           console.log("error while sharing notes "+error)
         });
@@ -86,6 +86,7 @@ const Board = (props) => {
     .then(res => res.text())
     .then(res => {
       let notesObj = JSON.parse(res);
+      console.log(notesObj);
       setNotes(notesObj);
       setIsLoading(false);
     }).catch((error)=> console.log(error));
@@ -118,16 +119,19 @@ const Board = (props) => {
     {!isLoading && (
       <div className="work-div">
       {notes.map((note, index) => 
-        <div className="card work-card" 
-          divIndex={index} >
-
+        <div className="card work-card">
             {note.noteDesc}
-            <div style={{float: 'right'}} className="confetti">
-            <FontAwesomeIcon id={index+"shareIcon"} icon={faShareAlt} onClick={() => sharedCard({note},{index})}
-                style={{marginTop: "inherit", color:'#007bff', fontSize:'30px'}}/>
-                <div id={index+"confetti"} className={"confettiText"}></div>
-                <div id={index+"errorAni"} className={"confettiText"}></div>
-            </div>
+            
+            {note.isShared ? 
+              <div style={{float: 'right'}}>
+              <Lottie style={{marginRight: "0%"}} options={defaultOptions} height={55} width={55} />
+              </div>
+              :
+              <div id={index+"confetti"} style={{float: 'right'}}>
+              <FontAwesomeIcon id={index+"shareIcon"} icon={faShareAlt} onClick={() => sharedCard({note},{index})}
+                style={{color:'#007bff', fontSize:'30px', marginRight: '15px'}}/>
+              </div>
+              }
         </div>
         )}
       </div>
