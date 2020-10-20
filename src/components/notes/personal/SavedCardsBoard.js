@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import  store  from "../../../store"
 import { useSelector } from "react-redux";
 import Lottie from 'react-lottie';
-import animationData from '../styles/tick-pop';
+import animationData from '../styles/tick-pop3';
 import erroranimationData from '../styles/error-message';
 import ReactDOM from 'react-dom';
 
