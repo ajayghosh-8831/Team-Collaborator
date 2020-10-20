@@ -86,7 +86,7 @@ exports.createNewUserNote = (req, res) => {
 exports.findAll = async (req, res) => {
     Note.find()
   .then(notes => {
-    console.log("Fecthing all notes");
+    console.log("Fetching all notes");
       res.send(notes);
   }).catch(err => {
       res.status(500).send({
@@ -96,13 +96,13 @@ exports.findAll = async (req, res) => {
 };
 
 exports.getUserNotes = (req, res) => {
-    console.log("fetching user notesss from DB")
+    console.log("fetching user notes from DB")
     Note.find({createdBy:req.params.userId})
   .then(notes => {
       res.send(notes);
   }).catch(err => {
       res.status(500).send({
-          message: err.message || "Some error occurred while retrieving user."
+          message: err.message || "Some error occurred while retrieving user notes."
       });
   });
   };
@@ -114,7 +114,7 @@ exports.getUserNotes = (req, res) => {
       res.send(notes);
   }).catch(err => {
       res.status(500).send({
-          message: err.message || "Some error occurred while retrieving user."
+          message: err.message || "Some error occurred while retrieving shared notes."
       });
   });
   };

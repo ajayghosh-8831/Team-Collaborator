@@ -5,13 +5,19 @@ import { connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import CardEditor from "./CardEditor";
 import  store  from "../../../store"
+import CommonMessage from '../../CommonMessage';
 
 class Card extends Component {
-  state = {
+  constructor(props) {
+    super(props);
+  this.state = {
     hover: false,
     editing: false,
     sharing:false,
+    message_type:'',
+    message_text:''
   };
+}
 
   startHover = () => this.setState({ hover: true });
   endHover = () => this.setState({ hover: false });
@@ -38,11 +44,12 @@ class Card extends Component {
   };
 
   endSharing = () => this.setState({ hover: true, sharing: false });
+  shareCard =  async text => {  // We cac call Share API call here
+   
+   
+    const { card, dispatch,alert_mesaage } = this.props;
 
-  shareCard = async text => {  // We cac call Share API call here
-    const { card, dispatch } = this.props;
-    alert("card Id :"+card._id +" & "+"card Text :" +card.text )
-
+   
     await fetch('/create-link', {
       method: 'POST',
       headers: {
@@ -54,9 +61,43 @@ class Card extends Component {
         teamName: "Expedia",
         userId : store.getState().userProfile.userProf.name,
         userImg : store.getState().userProfile.userProf.imageUrl
-      })
+      })   
+    }).then( json => {
+      this.setState({message_type:"success",message_text:card.text+"  Shared successfully"});
+    })
+    .catch((error) => {
+      this.setState({message_type:"error",message_text:"Error occured in shared functionality"});
+    });
+    
+    this.endSharing();
+  };
+
+  saveCard =  async () => {  // We cac call Share API call here
+    const { listId, card, dispatch } = this.props;
+    
+    await fetch('/create-user-link', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        {linkTitle: card._id, 
+        linkUrl: card.text, 
+        isShared: false, 
+        userId : store.getState().userProfile.userProf.name,
+        })   
+    }).then( json => {
+      this.setState({message_type:"success",message_text:"Saved successfully"});
+    })
+    .catch((error) => {
+      this.setState({message_type:"error",message_text:"Error occured in while saving links"});
     });
     this.endSharing();
+    dispatch({
+      type: "DELETE_CARD",
+      payload: { cardId: card._id, listId }
+    });
   };
 
   deleteCard = async () => {
@@ -70,9 +111,8 @@ class Card extends Component {
 
 
   render() {
-  
     const { card, index } = this.props;
-    const { hover, editing,sharing } = this.state;
+    const { hover, editing,sharing,message_type,message_text } = this.state;
 
     if ((!editing && !sharing) ||(!editing && sharing)) {
       return (
@@ -85,27 +125,25 @@ class Card extends Component {
               className="Card"
               onMouseEnter={this.startHover}
               onMouseLeave={this.endHover}
-            >
+            > 
+            
               {hover && (
                 <div className="Card-Icons">
-            
                   <div className="Card-Icon" onClick={this.startEditing}>
                     <ion-icon name="create" /> </div>
-                    <div className="Card-Icon" onClick={this.shareCard}  >
-                    <ion-icon ios="ios-share" md="md-share"></ion-icon>
-                 
+                    <div className="Card-Icon" onClick={this.shareCard}>
+                    <ion-icon name="share" /> </div>
+                    <div className="Card-Icon" onClick={this.saveCard}>
+                    <ion-icon name="save" /> </div>
                   </div>
-               
-                </div>
               )}
       
-
+      {message_type!=""?<CommonMessage messageText={message_text} messagetype={message_type}/>:null}
               {card.text}
             </div>
           )}
         </Draggable>
       );
-     
     } 
      if(!sharing && editing)
      {
@@ -118,7 +156,6 @@ class Card extends Component {
         />
       );
     }
-   
   }
 
 }
