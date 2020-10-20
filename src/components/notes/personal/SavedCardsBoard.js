@@ -6,6 +6,36 @@ import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import  store  from "../../../store"
 import { useSelector } from "react-redux";
+import Lottie from 'react-lottie';
+import animationData from '../styles/tick-pop';
+import erroranimationData from '../styles/error-message';
+import ReactDOM from 'react-dom';
+
+const defaultOptions = {
+  loop: 0,
+  autoplay: true,
+  animationData: animationData,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice"
+  }
+};
+
+const errorOptions = {
+  loop: 0,
+  autoplay: true,
+  animationData: erroranimationData,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice"
+  }
+};
+
+export function SuccessIcon() {
+  return <Lottie style={{float: 'right'}} options={defaultOptions} height={60} width={60} />;
+}
+
+export function ErrorIcon() {
+  return <Lottie style={{float: 'right'}} options={errorOptions} height={60} width={60} />;
+} 
 
 const Board = (props) => {
 
@@ -13,8 +43,8 @@ const Board = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const cards = useSelector(state => state.cardsById);
 
-  function sharedCard(note){
-    console.log(note);
+  function sharedCard(note, divIndex){
+    console.log(divIndex);
     fetch('/create-note', {
       method: 'POST',
       headers: {
@@ -27,12 +57,24 @@ const Board = (props) => {
             userId : store.getState().userProfile.userProf.name,
             userImg : store.getState().userProfile.userProf.imageUrl
           })   
-        }).then( json => {
-          console.log("Successfully shared notes")
+        }).then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Something went wrong');
+          }
+        })
+        .then((responseJson) => {
+          let conffetti = divIndex.index+"confetti";
+          ReactDOM.render(<SuccessIcon />, document.getElementById(conffetti));
+          console.log("Successfully shared notes "+responseJson )
         })
         .catch((error) => {
-          console.log("error while sharing notes")
+          let errorId = divIndex.index+"errorAni";
+          ReactDOM.render(<ErrorIcon />, document.getElementById(errorId));
+          console.log("error while sharing notes "+error)
         });
+        
   };
 
 
@@ -75,14 +117,17 @@ const Board = (props) => {
     <div>
     {!isLoading && (
       <div className="work-div">
-      {notes.map(note => 
-        <div className="card work-card">
-          <div>
+      {notes.map((note, index) => 
+        <div className="card work-card" 
+          divIndex={index} >
+
             {note.noteDesc}
-            <FontAwesomeIcon icon={faShareAlt} onClick={() => sharedCard({note})}
-                          style={{float: 'right', 
-                          marginTop: "inherit", color:'#007bff', fontSize:'30px'}}/>
-          </div>
+            <div style={{float: 'right'}} className="confetti">
+            <FontAwesomeIcon id={index+"shareIcon"} icon={faShareAlt} onClick={() => sharedCard({note},{index})}
+                style={{marginTop: "inherit", color:'#007bff', fontSize:'30px'}}/>
+                <div id={index+"confetti"} className={"confettiText"}></div>
+                <div id={index+"errorAni"} className={"confettiText"}></div>
+            </div>
         </div>
         )}
       </div>

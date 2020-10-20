@@ -29,13 +29,13 @@ exports.createNewNote = (req, res) => {
     console.log(note)
     // Save Note in the database
 
-    Note.exists({noteTitle: req.body.noteTitle}, function (err, res){
-        console.log("exists"+res)
-        if(!res){
-          console.log("Audio not found so inserting")
+    Note.exists({noteTitle: req.body.noteTitle}, function (err, result){
+        console.log("exists"+result)
+        if(!result){
+          console.log("Notes not found so inserting")
           note.save();
         }else{
-          console.log("Audio found so updating")
+          console.log("Notes found so updating")
           Note.updateOne(
             { noteTitle: req.body.noteTitle },
             { sharedBy: req.body.userId, 
@@ -43,14 +43,17 @@ exports.createNewNote = (req, res) => {
                 sharedByUserImg: req.body.userImg,
                 isShared : req.body.isShared},
             function (err, doc){
-              if(err){
-                console.log("Updating sharedBy failed");
-                res.status(500).send({
-                    message: err.message || "Some error occurred while creating the Note."
-                });
+            console.log("Update call back method "+doc);
+                if(err === null){
+                    console.log("Updating notes success");
+                    return res.status(200).send({"success":"success"});
+                } else {
+                console.log("Updating notes for sharing failed");
+                return res.status(500).send({"error":"failed"});;
               }
             });
         }
+        
       })
 };
 
