@@ -5,10 +5,40 @@ import  store  from "../../store"
 import { faShareAlt, faCheckCircle, faSave} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Skeleton from '@yisheng90/react-loading';
+import Lottie from 'react-lottie';
+import animationData from './styles/tick-pop3';
+import erroranimationData from './styles/error-message';
+import ReactDOM from 'react-dom';
 
 const recorder = new MicRecorder({
   bitRate: 128
 });
+
+const defaultOptions = {
+  loop: 0,
+  autoplay: true,
+  animationData: animationData,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice"
+  }
+};
+
+const errorOptions = {
+  loop: 0,
+  autoplay: true,
+  animationData: erroranimationData,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice"
+  }
+};
+
+export function SuccessIcon() {
+  return <Lottie style={{marginRight: "0%"}} options={defaultOptions} height={55} width={55} />;
+}
+
+export function ErrorIcon() {
+  return <Lottie style={{marginRight: "0%"}} options={errorOptions} height={55} width={55} />;
+} 
 
 const VoiceNotes = () => {
 
@@ -64,17 +94,18 @@ const VoiceNotes = () => {
       .then(res => res.text())
       .then(res => {
         let responeObj = JSON.parse(res);
+        setVoiceNotes([]);
         responeObj.forEach(data => {
           console.log("fetching voice notes for personal");
           console.log(data);
           var base64Flag = 'data:audio/mp3;base64,';
           var audioStr = arrayBufferToBase64(data.data.data);
-          let audioData = {"audio":base64Flag+audioStr, "audioId":data.audioId}
+          let audioData = {"audio":base64Flag+audioStr, "audioId":data.audioId, "sharedTo":data.sharedTo}
           setVoiceNotes(voiceNotes => voiceNotes.concat(audioData))
           setIsLoading(false);
         });
       }).catch(console.log("No notes saved by user"));
-    }, [1]);
+    }, [saved]);
   
     function arrayBufferToBase64(buffer) {
       var binary = '';
@@ -83,8 +114,6 @@ const VoiceNotes = () => {
       return window.btoa(binary);
     };
 
-    
-    
     async function saveCard (audioData) {
         console.log(audioData.audioData.audioId)
         let blob = await fetch(audioData.audioData.audio).then(r => r.blob());
@@ -106,7 +135,7 @@ const VoiceNotes = () => {
           
     };
 
-    async function shareCard (audioData) {
+    async function shareCard (audioData, divIndex) {
       if(shareIcon !== faCheckCircle){
         let blob = await fetch(audioData.audioData.audio).then(r => r.blob());
         var formData = new FormData();
@@ -119,12 +148,18 @@ const VoiceNotes = () => {
   
         fetch('/share-voice-notes', {
           method: "POST", body: formData
-          }).then(response => response.json())
-          .then(success => {
-            alert("saved successfully");
           })
-          .catch(error => {console.log(error); alert("failed")}
-        );
+          .then(response => response.json())
+          .then((responseJson) => {
+            let conffetti = divIndex.index+"confetti";
+            ReactDOM.render(<SuccessIcon />, document.getElementById(conffetti));
+            console.log("Successfully shared notes "+responseJson )
+          })
+          .catch((error) => {
+            let errorId = divIndex.index+"confetti";
+            ReactDOM.render(<ErrorIcon />, document.getElementById(errorId));
+            console.log("error while sharing notes "+error)
+          });
       }
     };
   
@@ -179,14 +214,21 @@ const VoiceNotes = () => {
               <div className="container text-center" style={{marginTop:"2%"}}>
                 <div>
                       <div id="outerDiv" className="work-div">
-                      {voiceNotes.map(audioData => 
+                      {voiceNotes.map((audioData, index) => 
                       <div className="card work-card">
                           <audio preload="auto" controls style={{width: '50%'}}>
                             <source src={audioData.audio} />
                           </audio>
-                          <FontAwesomeIcon icon={shareIcon} onClick={() => shareCard({audioData})} 
-                          style={{float: 'right', 
-                          marginTop: "inherit", color:'#007bff', fontSize:'40px'}}/>
+                          {audioData.sharedTo !== undefined ? 
+                          <div style={{float: 'right'}}>
+                          <Lottie style={{marginRight: "0%"}} options={defaultOptions} height={55} width={55} />
+                          </div>
+                          :
+                          <div id={index+"confetti"} style={{float: 'right'}}>
+                          <FontAwesomeIcon id={index+"shareIcon"} icon={faShareAlt} onClick={() => shareCard({audioData},{index})}
+                            style={{color:'#007bff', fontSize:'30px', marginRight: '15px'}}/>
+                          </div>
+                          }
                         </div>
                       )}
                       </div>

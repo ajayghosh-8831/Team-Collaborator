@@ -121,7 +121,6 @@ const Board = (props) => {
       {notes.map((note, index) => 
         <div className="card work-card">
             {note.noteDesc}
-            
             {note.isShared ? 
               <div style={{float: 'right'}}>
               <Lottie style={{marginRight: "0%"}} options={defaultOptions} height={55} width={55} />
