@@ -11,6 +11,11 @@ function Header(props) {
 
     useEffect(() => {
         fetch('/fetch-leaderboard')
+        .then(function(response) {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response;})
         .then(res => res.text())
         .then(res => {
           console.log(res);
@@ -19,7 +24,7 @@ function Header(props) {
             return b.points - a.points;
             });
           setLeaderBoardData(responeObj)
-        });
+        }).catch(error => console.log("fetching user points failed"));
       }, [modal]);
 
 
