@@ -31,9 +31,20 @@ function App() {
   };
 
   function createUser(userDetails) {
-    console.log("Creating user in DB "+userDetails.profileObj.name)
-    fetch('/user/'+userDetails.profileObj.name)
-    .then(function(response) {
+    console.log("Creating user in DB ");
+    console.log(userDetails.profileObj.name);
+    console.log(userDetails.profileObj.imageUrl);
+    
+    fetch('/create-new-user', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({userid: userDetails.profileObj.name, 
+        userImg: userDetails.profileObj.imageUrl
+      }) 
+    }).then(function(response) {
       if (!response.ok) {
           throw Error(response.statusText);
       }

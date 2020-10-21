@@ -18,7 +18,7 @@ app.use(bodyParser.json())
 mongoose.Promise = global.Promise;
 
 // Connecting to the database
-mongoose.connect(dbConfig.url, {
+mongoose.connect(dbConfig.url,{ autoIndex: true }, {
     useNewUrlParser: true
 }).then(() => {
     console.log("Successfully connected to the database");    
@@ -31,6 +31,7 @@ require('../routes/note.routes.js')(app);
 require('../routes/user.routes.js')(app);
 require('../routes/voice.routes.js')(app);
 require('../routes/link.routes.js')(app);
+require('../routes/leaderboard.routes.js')(app);
 
 app.set('port',process.env.PORT || 4000);
 // listen for requests

@@ -1,10 +1,27 @@
-import React, { Component, useState } from 'react';
-import { Container, Row, Col,Button } from 'reactstrap';
+import React, { Component, useState, useEffect } from 'react';
+import { Container, Row, Col,Button,Modal,ModalHeader,ModalBody,ModalFooter,Table } from 'reactstrap';
 import Tab from  './TabComponent';
 import store from "../store";
 
-
 function Header(props) {
+
+    const [modal, setModal] = useState(false);
+    const toggleModal = () => setModal(!modal);
+    const [leaderBoardData, setLeaderBoardData] = useState([]);
+
+    useEffect(() => {
+        fetch('/fetch-leaderboard')
+        .then(res => res.text())
+        .then(res => {
+          console.log(res);
+          let responeObj = JSON.parse(res);
+          responeObj.sort((a, b) => {
+            return b.points - a.points;
+            });
+          setLeaderBoardData(responeObj)
+        });
+      }, [modal]);
+
 
     let userProfile = store.getState().userProfile.userProf;
     console.log("###########userProfile############")
@@ -16,7 +33,7 @@ function Header(props) {
                     <Col id="TabColumn">
                         <Row>
                             <Col md={{ size: 1, offset: 11 }}>
-                                <Button id ="AvatarBtn" outline color="secondary" style={{float:"right"}}>
+                                <Button id ="AvatarBtn" onClick={toggleModal} outline color="secondary" style={{float:"right"}}>
                                     <img id="Avatar" alt="User Image" src={userProfile === undefined ? "" : store.getState().userProfile.userProf.imageUrl}/>
                                 </Button>
                             </Col>
@@ -28,6 +45,34 @@ function Header(props) {
                         </Row>
                     </Col>
                 </Row>
+
+                <Modal isOpen={modal} toggle={toggleModal} backdrop="static">
+                    <ModalHeader toggle={toggleModal}  
+                    style={{ textAlign: 'Center' }} >LeaderBoard</ModalHeader>
+                    <ModalBody style={{ textAlign: 'Center' }}>
+                    <Table striped>
+                        <thead>
+                            <tr>
+                            <th>Points</th>
+                            <th>Name</th>
+                            <th>User</th>
+                            </tr>
+                        </thead>
+                    {leaderBoardData.map((data, index) => 
+                        <tbody>
+                            <tr>
+                            <td>{data.points}</td>
+                            <td>{data.userid}</td>
+                            <td><img id="Avatar" alt="User Image" src={data.userImg}/></td>
+                            </tr>
+                        </tbody>
+                        )}
+                        </Table>
+                    </ModalBody>
+                    <ModalFooter>
+                    <Button color="secondary" onClick={toggleModal}>Cancel</Button>
+                    </ModalFooter>
+                </Modal>
 
             </Container>
         );

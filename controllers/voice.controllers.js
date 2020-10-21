@@ -1,4 +1,5 @@
 const Voice  = require('../models/voice.model.js');
+const User  = require('../models/user.model.js');
 const multer = require('multer');
 var fs = require('fs');
  
@@ -41,6 +42,12 @@ exports.createVoiceNote = (req, res) => {
                   if(!res){
                     console.log("Audio not found so inserting")
                     voice.save();
+                    User.findOneAndUpdate( {userid: req.body.sharedBy}, 
+                      {$inc : {'points' : 100}}, 
+                      {new: true}, 
+                      function(err, response) { 
+                        console.log("points updated for user "+req.body.sharedBy);
+                      });
                   }else{
                     console.log("Audio found so updating")
                     Voice.updateOne(
@@ -51,6 +58,12 @@ exports.createVoiceNote = (req, res) => {
                           console.log("Updating sharedBy failed");
                         }
                       });
+                      User.findOneAndUpdate( {userid: req.body.sharedBy}, 
+                        {$inc : {'points' : 100}}, 
+                        {new: true}, 
+                        function(err, response) { 
+                          console.log("points updated for user "+req.body.sharedBy    );
+                        });
                   }
                 })
             

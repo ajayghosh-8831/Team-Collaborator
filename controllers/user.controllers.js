@@ -11,10 +11,11 @@ exports.findTeams = (req, res) => {
   });
 };
 
-exports.createUser = (req, res) => {
-    console.log("$$$$$$$$$$$$$$$"+req.params.userId)
+exports.createNewUser = (req, res) => {
+    console.log("$$$$$$$$$$$$$$$"+req.body.userid + req.body.userImg)
     const user = new User({
-        userid: req.params.userId, 
+        userid: req.body.userid, 
+        userImg: req.body.userImg
     });
 
     // Save user in the database

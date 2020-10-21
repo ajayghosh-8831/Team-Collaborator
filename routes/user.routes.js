@@ -9,6 +9,6 @@ app.get('/teams/:userId', user.findTeams);
 
 app.get('/teams/:userId/:teamName', user.addToTeam);
 
-app.get('/user/:userId', user.createUser);
+app.post('/create-new-user', user.createNewUser);
 
 }

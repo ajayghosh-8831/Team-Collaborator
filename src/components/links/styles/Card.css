@@ -50,6 +50,22 @@ height: 80px;
     display: flow-root;
 }
 
+.leader-card{
+  position: relative;
+  cursor: pointer;
+  background: white;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 0 rgba(9, 45, 66, 0.25);
+  font-size: 12px;
+  overflow-wrap: break-word;
+  min-height: 12px;
+  display: flow-root;
+}
+
+
 .Card:hover {
   background: #f5f6f7;
 }
