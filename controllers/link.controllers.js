@@ -29,9 +29,9 @@ exports.createNewLink = (req, res) => {
     console.log(link)
     // Save Link in the database
     
-    Link.exists({linkTitle: req.body.linkTitle} ,function(err,res){
-        console.log("exists"+res)
-        if(!res){
+    Link.exists({linkTitle: req.body.linkTitle} ,function(err,result){
+        console.log("exists"+result)
+        if(!result){
             console.log("Link not found so inserting")
             link.save();
         }else{
