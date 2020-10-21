@@ -43,12 +43,14 @@ exports.createNewLink = (req, res) => {
                     sharedByUserImg: req.body.userImg,
                     isShared : req.body.isShared},
                 function (err, doc){
-                    if(err){
-                        console.log("Updating sharedBy failed");
-                        res.status(500).send({
-                          message: err.message || "Some error occurred while creating the Link."
-                        });
-                    }
+                    console.log("Update call back method "+doc);
+                    if(err === null){
+                        console.log("Updating links success");
+                        return res.status(200).send({"success":"success"});
+                    } else {
+                    console.log("Updating links for sharing failed");
+                    return res.status(500).send({"error":"failed"});;
+                  }
                 });
         }
     })

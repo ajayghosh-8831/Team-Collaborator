@@ -30,3 +30,12 @@
 .Add-List-Button ion-icon {
   margin-right: 1px;
 }
+
+.confetti .confettiText {
+  color: #fff;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  bottom: -7%;
+  right: -8px;
+}

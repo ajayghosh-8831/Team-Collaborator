@@ -6,6 +6,36 @@ import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import  store  from "../../../store"
 import { useSelector } from "react-redux";
+import Lottie from 'react-lottie';
+import animationData from '../../notes/styles/tick-pop3.json';
+import erroranimationData from '../../notes/styles/error-message';
+import ReactDOM from 'react-dom';
+
+const defaultOptions = {
+   loop: 0,
+   autoplay: true,
+   animationData: animationData,
+   rendererSettings: {
+     preserveAspectRatio: "xMidYMid slice"
+   }
+};
+
+const errorOptions = {
+   loop: 0,
+   autoplay: true,
+   animationData: erroranimationData,
+   rendererSettings: {
+     preserveAspectRatio: "xMidYMid slice"
+   }
+};
+
+export function SuccessIcon() {
+  return <Lottie style={{marginRight: "0%"}} options={defaultOptions} height={55} width={55} />;
+}
+
+export function ErrorIcon() {
+  return <Lottie style={{marginRight: "0%"}} options={errorOptions} height={55} width={55} />;
+} 
 
 const Board = (props) => {
 
@@ -13,8 +43,8 @@ const Board = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const cards = useSelector(state => state.cardsById);
 
-  function sharedCard(link){
-    console.log(link);
+  function sharedCard(link, divIndex){
+    console.log(divIndex);
     fetch('/create-link', {
       method: 'POST',
       headers: {
@@ -27,12 +57,24 @@ const Board = (props) => {
             userId : store.getState().userProfile.userProf.name,
             userImg : store.getState().userProfile.userProf.imageUrl
           })   
-        }).then( json => {
-          console.log("Successfully shared links")
+        }).then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Something went wrong');
+          }
+        })
+        .then((responseJson) => {
+          let conffetti = divIndex.index+"confetti";
+          ReactDOM.render(<SuccessIcon />, document.getElementById(conffetti));
+          console.log("Successfully shared links "+responseJson )
         })
         .catch((error) => {
-          console.log("error while sharing links")
+          let errorId = divIndex.index+"confetti";
+          ReactDOM.render(<ErrorIcon />, document.getElementById(errorId));
+          console.log("error while sharing links "+error)
         });
+
   };
 
 
@@ -44,6 +86,7 @@ const Board = (props) => {
     .then(res => res.text())
     .then(res => {
       let linksObj = JSON.parse(res);
+      console.log(linksObj);
       setLinks(linksObj);
       setIsLoading(false);
     }).catch((error)=> console.log(error));
@@ -75,14 +118,19 @@ const Board = (props) => {
     <div>
     {!isLoading && (
       <div className="work-div">
-      {links.map(link => 
+      {links.map((link, index) => 
         <div className="card work-card">
-          <div>
             {link.linkUrl}
-            <FontAwesomeIcon icon={faShareAlt} onClick={() => sharedCard({link})}
-                          style={{float: 'right', 
-                          marginTop: "inherit", color:'#007bff', fontSize:'30px'}}/>
-          </div>
+            {link.isShared ? 
+              <div style={{float: 'right'}}>
+              <Lottie style={{marginRight: "0%"}} options={defaultOptions} height={55} width={55} />
+              </div>
+              :
+              <div id={index+"confetti"} style={{float: 'right'}}>
+              <FontAwesomeIcon id={index+"shareIcon"} icon={faShareAlt} onClick={() => sharedCard({link},{index})}
+                style={{color:'#007bff', fontSize:'30px', marginRight: '15px'}}/>
+              </div>
+              }
         </div>
         )}
       </div>
