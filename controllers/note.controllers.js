@@ -35,7 +35,7 @@ exports.createNewNote = (req, res) => {
           console.log("Notes not found so inserting")
           note.save();
           User.findOneAndUpdate( {userid: req.body.userId}, 
-            {$inc : {'points' : 100}}, 
+            {$inc : {'points' : 80}}, 
             {new: true}, 
             function(err, response) { 
               console.log("points updated for user "+req.body.userId);
@@ -59,7 +59,7 @@ exports.createNewNote = (req, res) => {
               }
             });
             User.findOneAndUpdate( {userid: req.body.userId}, 
-            {$inc : {'points' : 100}}, 
+            {$inc : {'points' : 80}}, 
             {new: true}, 
             function(err, response) { 
               console.log("points updated for user "+req.body.userId);

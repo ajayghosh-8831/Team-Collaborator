@@ -34,6 +34,12 @@ exports.createNewLink = (req, res) => {
         if(!result){
             console.log("Link not found so inserting")
             link.save();
+            User.findOneAndUpdate( {userid: req.body.userId}, 
+                {$inc : {'points' : 50}}, 
+                {new: true}, 
+                function(err, response) { 
+                  console.log("points updated for user "+req.body.userId);
+                });
         }else{
             console.log("Link found so updating")
             Link.updateOne(
@@ -52,6 +58,12 @@ exports.createNewLink = (req, res) => {
                     return res.status(500).send({"error":"failed"});;
                   }
                 });
+                User.findOneAndUpdate( {userid: req.body.userId}, 
+                    {$inc : {'points' : 50}}, 
+                    {new: true}, 
+                    function(err, response) { 
+                      console.log("points updated for user "+req.body.userId);
+                    });
         }
     })
 

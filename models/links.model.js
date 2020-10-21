@@ -8,7 +8,7 @@ var linksSchema = new Schema({
     sharedWith: { type: Array },
     sharedBy : { type: String},
     sharedByUserImg : { type: String},
-    createdBy:{type:String},
+    createdBy:{type:String}
 });
 
 module.exports = mongoose.model('Link', linksSchema);
