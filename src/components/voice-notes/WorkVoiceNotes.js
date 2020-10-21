@@ -67,7 +67,7 @@ const WorkVoiceNotes = () => {
                   <audio preload="auto" controls style={{width: '50%'}}>
                     <source src={note.audio} />
                   </audio>
-                  <img id="Avatar" alt="User Image" className="work-notes-img" src={note.userImg}/>
+                  <img id="Avatar" alt="User Image" style={{marginLeft:"auto"}} className="work-notes-img" src={note.userImg}/>
                 </div>
               )}
               </div>

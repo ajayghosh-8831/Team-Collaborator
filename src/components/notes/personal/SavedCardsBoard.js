@@ -119,14 +119,14 @@ const Board = (props) => {
     {!isLoading && (
       <div className="work-div">
       {notes.map((note, index) => 
-        <div className="card work-card">
+        <div className="card work-card" style={{clear: 'both'}}>
             {note.noteDesc}
             {note.isShared ? 
               <div style={{float: 'right'}}>
               <Lottie style={{marginRight: "0%"}} options={defaultOptions} height={55} width={55} />
               </div>
               :
-              <div id={index+"confetti"} style={{float: 'right'}}>
+              <div id={index+"confetti"} style={{float: 'right', marginLeft: 'auto'}}>
               <FontAwesomeIcon id={index+"shareIcon"} icon={faShareAlt} onClick={() => sharedCard({note},{index})}
                 style={{color:'#007bff', fontSize:'30px', marginRight: '15px'}}/>
               </div>

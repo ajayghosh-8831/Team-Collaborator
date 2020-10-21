@@ -215,7 +215,7 @@ const VoiceNotes = () => {
                 <div>
                       <div id="outerDiv" className="work-div">
                       {voiceNotes.map((audioData, index) => 
-                      <div className="card work-card">
+                      <div className="card work-card" style={{clear: 'both'}}>
                           <audio preload="auto" controls style={{width: '50%'}}>
                             <source src={audioData.audio} />
                           </audio>
@@ -224,7 +224,7 @@ const VoiceNotes = () => {
                           <Lottie style={{marginRight: "0%"}} options={defaultOptions} height={55} width={55} />
                           </div>
                           :
-                          <div id={index+"confetti"} style={{float: 'right'}}>
+                          <div id={index+"confetti"} style={{float: 'right', marginLeft: 'auto'}}>
                           <FontAwesomeIcon id={index+"shareIcon"} icon={faShareAlt} onClick={() => shareCard({audioData},{index})}
                             style={{color:'#007bff', fontSize:'30px', marginRight: '15px'}}/>
                           </div>
