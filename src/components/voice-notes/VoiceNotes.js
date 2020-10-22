@@ -135,7 +135,7 @@ const VoiceNotes = () => {
           
     };
 
-    async function shareCard (audioData, divIndex) {
+    async function shareCard (audioData, divIndex, sharedFrom) {
       if(shareIcon !== faCheckCircle){
         let blob = await fetch(audioData.audioData.audio).then(r => r.blob());
         var formData = new FormData();
@@ -151,12 +151,22 @@ const VoiceNotes = () => {
           })
           .then(response => response.json())
           .then((responseJson) => {
-            let conffetti = divIndex.index+"confetti";
+            let conffetti;
+            if(sharedFrom === "topDiv"){
+              conffetti = divIndex.index+"topDiv";
+            } else {
+              conffetti = divIndex.index+"confetti";
+            }
             ReactDOM.render(<SuccessIcon />, document.getElementById(conffetti));
             console.log("Successfully shared notes "+responseJson )
           })
           .catch((error) => {
-            let errorId = divIndex.index+"confetti";
+            let errorId;
+            if(sharedFrom === "topDiv"){
+              errorId = divIndex.index+"topDiv";
+            } else {
+              errorId = divIndex.index+"confetti";
+            }
             ReactDOM.render(<ErrorIcon />, document.getElementById(errorId));
             console.log("error while sharing notes "+error)
           });
@@ -170,14 +180,18 @@ const VoiceNotes = () => {
       <button id="recordBtn" className={buttonClass} onClick={() => clickHandler()}>{buttonText}</button>
         <div>
               <div id="outerDiv" className="work-div">
-              {audioElements.map(audioData => 
+              {audioElements.map((audioData, index) => 
               <div className="card work-card" id={shortid.generate()}>
                   <audio preload="auto" controls style={{width: '50%'}}>
                     <source src={audioData.audio} />
                   </audio>
-                  <FontAwesomeIcon icon={shareIcon} onClick={() => shareCard({audioData})} 
+                  <div id={index+"topDiv"} style={{float: 'right', marginLeft: 'auto', marginTop: "inherit"}}>
+                      <FontAwesomeIcon id={index+"shareIcon"} icon={faShareAlt} onClick={() => shareCard({audioData},{index},"topDiv")}
+                      style={{color:'#007bff', fontSize:'30px', marginRight: '15px'}}/>
+                  </div>
+                  {/* <FontAwesomeIcon  icon={shareIcon} onClick={() => shareCard({audioData})} 
                   style={{float: 'right', 
-                  marginTop: "inherit", color:'#007bff', fontSize:'40px'}}/>
+                  marginTop: "inherit", color:'#007bff', fontSize:'40px'}}/> */}
                   <FontAwesomeIcon icon={faSave} onClick={() => saveCard({audioData})} 
                   style={{float: 'left', 
                   marginTop: "inherit", color:'#007bff', fontSize:'40px'}}/>
@@ -224,8 +238,8 @@ const VoiceNotes = () => {
                           <Lottie style={{marginRight: "0%"}} options={defaultOptions} height={55} width={55} />
                           </div>
                           :
-                          <div id={index+"confetti"} style={{float: 'right', marginLeft: 'auto'}}>
-                          <FontAwesomeIcon id={index+"shareIcon"} icon={faShareAlt} onClick={() => shareCard({audioData},{index})}
+                          <div id={index+"confetti"} style={{float: 'right', marginLeft: 'auto', marginTop: "inherit"}}>
+                          <FontAwesomeIcon id={index+"shareIcon"} icon={faShareAlt} onClick={() => shareCard({audioData},{index},"savedCards")}
                             style={{color:'#007bff', fontSize:'30px', marginRight: '15px'}}/>
                           </div>
                           }
