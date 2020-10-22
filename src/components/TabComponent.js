@@ -61,9 +61,17 @@ const Tab = (props) => {
         console.log(data.teams[0])
         setTeamName(data.teams[0]);
         setWorkTabTitle("Work "+"("+data.teams[0]+")");
+        storeTeamName(data.teams[0]);
       } 
     })
     .catch(error => console.log("callGetTeamName failed"));
+  }
+
+  function storeTeamName(team){
+    store.dispatch({
+      type: "GET_TEAM",
+      payload: {teamName:team}
+    });
   }
 
   function addToTeam(team) {

@@ -58,7 +58,7 @@ class Card extends Component {
       },
       body: JSON.stringify({noteTitle: card._id, 
         noteDesc: card.text, isShared: true, 
-        teamName: "Expedia",
+        teamName: store.getState().teamName.teamName.teamName,
         userId : store.getState().userProfile.userProf.name,
         userImg : store.getState().userProfile.userProf.imageUrl
       })   

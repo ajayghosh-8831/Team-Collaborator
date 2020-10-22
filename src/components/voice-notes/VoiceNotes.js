@@ -128,7 +128,7 @@ const VoiceNotes = () => {
           }).then(response => response.json())
           .then(success => {
             setSaved(true);
-            alert("saved successfully");
+            //alert("saved successfully");
           })
           .catch(error => {console.log(error); alert("failed")}
         );
@@ -144,7 +144,7 @@ const VoiceNotes = () => {
         formData.append('sharedByUserImg', store.getState().userProfile.userProf.imageUrl);
         formData.append('audioId', audioData.audioData.audioId);
         //Later we have to fetch the team neam probably have to used redux to store user's team
-        formData.append('sharedTo', "Expedia");
+        formData.append('sharedTo', store.getState().teamName.teamName.teamName);
   
         fetch('/share-voice-notes', {
           method: "POST", body: formData

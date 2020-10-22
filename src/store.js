@@ -139,11 +139,23 @@ const userProfile =(state = {}, action) => {
   }
 }
 
+const teamName = (state = {},action) => {
+  switch(action.type){
+    case "GET_TEAM":{
+       const {teamName} = action.payload;
+       return{...state, teamName:{teamName}}
+    }
+    default:
+      return state;
+  }
+}
+
 const reducers = combineReducers({
   board,
   listsById,
   cardsById,
-  userProfile
+  userProfile,
+  teamName
 });
 
 const saveState = state => {

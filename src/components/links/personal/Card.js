@@ -58,7 +58,7 @@ class Card extends Component {
       },
       body: JSON.stringify({linkTitle: card._id, 
         linkUrl: card.text, isShared: true, 
-        teamName: "Expedia",
+        teamName: store.getState().teamName.teamName.teamName,
         userId : store.getState().userProfile.userProf.name,
         userImg : store.getState().userProfile.userProf.imageUrl
       })   

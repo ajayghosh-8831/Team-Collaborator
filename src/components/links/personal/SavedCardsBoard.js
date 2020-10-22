@@ -53,7 +53,7 @@ const Board = (props) => {
           },
           body: JSON.stringify({linkTitle: link.link.linkTitle, 
             linkUrl: link.link.linkUrl, isShared: true, 
-            teamName: "Expedia",
+            teamName: store.getState().teamName.teamName.teamName,
             userId : store.getState().userProfile.userProf.name,
             userImg : store.getState().userProfile.userProf.imageUrl
           })   

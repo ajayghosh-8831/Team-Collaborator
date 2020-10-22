@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Skeleton from '@yisheng90/react-loading';
 import shortid from "shortid";
+import  store  from "../../store"
 
 const WorkVoiceNotes = () => {
 
@@ -9,7 +10,7 @@ const WorkVoiceNotes = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch('/fetch-all-notes/Expedia')
+    fetch(`/fetch-all-notes/${store.getState().teamName.teamName.teamName}`)
     .then(res => res.text())
     .then(res => {
       //console.log(res);

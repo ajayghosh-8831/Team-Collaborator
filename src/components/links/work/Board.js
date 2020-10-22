@@ -2,6 +2,7 @@ import "../styles/Board.css";
 
 import React, { useState, useEffect } from "react";
 import Skeleton from '@yisheng90/react-loading';
+import  store  from "../../../store"
 
 const Board = () => {
 
@@ -10,7 +11,7 @@ const Board = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch('/fetch-team-links/Expedia')
+    fetch(`/fetch-team-links/${store.getState().teamName.teamName.teamName}`)
     .then(res => res.text())
     .then(res => {
       let linksObj = JSON.parse(res);
