@@ -54,8 +54,8 @@ function Header(props) {
                 <Modal isOpen={modal} toggle={toggleModal} backdrop="static">
                     <ModalHeader toggle={toggleModal}  
                     style={{ textAlign: 'Center' }} >LeaderBoard</ModalHeader>
-                    <ModalBody style={{ textAlign: 'Center' }}>
-                    <Table striped>
+                    <ModalBody style={{ textAlign: 'Center', padding:"4px" }}>
+                    <Table dark hover style={{ marginBottom: '0px' }}>
                         <thead>
                             <tr>
                             <th>Points</th>
@@ -74,11 +74,7 @@ function Header(props) {
                         )}
                         </Table>
                     </ModalBody>
-                    <ModalFooter>
-                    <Button color="secondary" onClick={toggleModal}>Cancel</Button>
-                    </ModalFooter>
                 </Modal>
-
             </Container>
         );
 }
