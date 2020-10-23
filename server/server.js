@@ -32,6 +32,7 @@ require('../routes/user.routes.js')(app);
 require('../routes/voice.routes.js')(app);
 require('../routes/link.routes.js')(app);
 require('../routes/leaderboard.routes.js')(app);
+require('../routes/todo.routes')(app);
 
 app.set('port',process.env.PORT || 4000);
 // listen for requests
