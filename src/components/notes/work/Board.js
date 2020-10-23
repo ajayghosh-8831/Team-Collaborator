@@ -11,7 +11,7 @@ const Board = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(`/fetch-team-notes/${store.getState().teamName.teamName.teamName}`)
+    fetch(`/fetch-team-notes/Expedia}`)
     .then(res => res.text())
     .then(res => {
       let notesObj = JSON.parse(res);
