@@ -38,9 +38,14 @@ function Header(props) {
                     <Col id="TabColumn">
                         <Row>
                             <Col md={{ size: 1, offset: 11 }}>
-                                <Button id ="AvatarBtn" onClick={toggleModal} outline color="secondary" style={{float:"right"}}>
+                                <Button id ="AvatarBtn" outline color="secondary" style={{float:"right"}}>
                                     <img id="Avatar" alt="User Image" src={userProfile === undefined ? "" : store.getState().userProfile.userProf.imageUrl}/>
                                 </Button>
+                                <div class="avatars" style={{float:"right"}}>
+                                {leaderBoardData.map((data, index) => 
+                                <a onClick={toggleModal} class="avatars__item"><img class="avatar" src={data.userImg} /></a>
+                                )}
+                                </div>
                             </Col>
                         </Row>
                         <Row>
