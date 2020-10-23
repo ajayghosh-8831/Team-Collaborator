@@ -1,22 +1,22 @@
 module.exports = (app) => {
-    const todo = require('../controllers/todo.controllers.js');
+    const todoController = require('../controllers/todo.controllers.js');
 
-// Create a new ToDo
-app.post('/team-collaborator/usertodo', todo.create);
+    app.get('/fetch-user-todos/:userId', todoController.getUserToDos);
 
-app.get('/todo', todo.findAll);
+    app.post('/create-todo', todoController.create);
 
-app.get('/', (req, res) => {
-    res.json({"message": "Welcome to Easy Reminders application. Note Reminders quickly. Organize and keep track of all your Reminders."});
-});
+    app.post('/edit-todo', todoController.edit);
 
-//Retrieve a single ToDo with todoId
-app.get('/todo/:todoId', todo.findOne);
+    app.get('/todo/:todoId', todoController.findOne);
 
-//Update a ToDo with todoId
-//app.put('/todo/:todoId', todo.update);
+    app.delete('/todo/:todoId', todoController.delete);
 
-//Delete a ToDo with todoId
-app.delete('/todo/:todoId', todo.delete);
+    app.get('/', (req, res) => {
+        res.json(
+            {
+                "message": "Welcome to Easy Reminders application. Note Reminders quickly. Organize and keep track of all your Reminders."
+            }
+        );
+    });
 
 }
