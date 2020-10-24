@@ -28,6 +28,29 @@ export default store => {
   });
 
   store.dispatch({
+    type: "LINKS_ADD_LIST",
+    payload: { listId: firstListId, listTitle: "Create your notes" }
+  });
+
+  store.dispatch({
+    type: "LINKS_ADD_CARD",
+    payload: {
+      listId: firstListId,
+      cardId: shortid.generate(),
+      cardText: "First Link"
+    }
+  });
+
+  store.dispatch({
+    type: "LINKS_ADD_CARD",
+    payload: {
+      listId: firstListId,
+      cardId: shortid.generate(),
+      cardText: "Second Link"
+    }
+  });
+
+  store.dispatch({
     type:"USER_LOGIN",
     payload:{
       userEmail:"",

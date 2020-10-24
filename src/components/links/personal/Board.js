@@ -25,7 +25,7 @@ class Board extends Component {
       // Prevent update if nothing has changed
       if (source.index !== destination.index) {
         dispatch({
-          type: "MOVE_LIST",
+          type: "LINKS_MOVE_LIST",
           payload: {
             oldListIndex: source.index,
             newListIndex: destination.index
@@ -41,7 +41,7 @@ class Board extends Component {
       source.droppableId !== destination.droppableId
     ) {
       dispatch({
-        type: "MOVE_CARD",
+        type: "LINKS_MOVE_CARD",
         payload: {
           sourceListId: source.droppableId,
           destListId: destination.droppableId,
@@ -78,6 +78,6 @@ class Board extends Component {
   }
 }
 
-const mapStateToProps = state => ({ board: state.board });
+const mapStateToProps = state => ({ board: state.linksboard });
 
 export default connect(mapStateToProps)(Board);

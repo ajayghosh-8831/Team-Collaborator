@@ -38,7 +38,7 @@ class Card extends Component {
     this.endEditing();
 
     dispatch({
-      type: "CHANGE_CARD_TEXT",
+      type: "LINKS_CHANGE_CARD_TEXT",
       payload: { cardId: card._id, cardText: text }
     });
   };
@@ -95,7 +95,7 @@ class Card extends Component {
     });
     this.endSharing();
     dispatch({
-      type: "DELETE_CARD",
+      type: "LINKS_DELETE_CARD",
       payload: { cardId: card._id, listId }
     });
   };
@@ -104,7 +104,7 @@ class Card extends Component {
     const { listId, card, dispatch } = this.props;
 
     dispatch({
-      type: "DELETE_CARD",
+      type: "LINKS_DELETE_CARD",
       payload: { cardId: card._id, listId }
     });
   };
@@ -161,7 +161,7 @@ class Card extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  card: state.cardsById[ownProps.cardId]
+  card: state.linkscardsById[ownProps.cardId]
 });
 
 export default connect(mapStateToProps)(Card);

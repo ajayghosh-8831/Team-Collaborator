@@ -9,19 +9,40 @@ const Board = () => {
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [searchResults, setSearchResults] = React.useState([]);
+
+  const handleChange = e => {
+    setSearchTerm(e.target.value);
+  };
+  
+  useEffect(() => {
+    const results = notes.filter(note =>
+      note.noteDesc.toLowerCase().includes(searchTerm)
+    );
+    setSearchResults(results);
+    console.log(results);
+  }, [searchTerm]);
+
   useEffect(() => {
     setIsLoading(true);
-    fetch(`/fetch-team-notes/${store.getState().teamName.teamName.teamName}`)
+    let team = store.getState().teamName.teamName;
+    console.log("fetch-team-notes");
+    console.log(team);
+    let url = "/fetch-team-notes/"+ (team !== undefined ? team.teamName :"");
+    console.log(url);
+    fetch(url)
     .then(res => res.text())
     .then(res => {
       let notesObj = JSON.parse(res);
       setNotes(notesObj);
+      setSearchResults(notesObj);
       setIsLoading(false);
     }).then( json => {
-      console.log("Successfully shared notes")
+      console.log("Successfully fetched notes")
     })
     .catch((error) => {
-      console.log("error while sharing notes")
+      console.log("error while fetching notes")
     });
   }, []);
   //{isLoading && <Skeleton width={250} row={6} />}
@@ -49,9 +70,12 @@ const Board = () => {
     )}
     </div>
     <div>
+    <div className="form search">
+    <input type="text" name="search" value={searchTerm} onChange={handleChange} placeholder="Search notes.."/>
+    </div>
     {!isLoading && (
       <div className="work-div">
-      {notes.map(note => 
+      {searchResults.map(note => 
         <div className="card work-card">
           <div>
             {note.noteDesc}

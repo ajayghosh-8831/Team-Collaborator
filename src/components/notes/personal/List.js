@@ -82,7 +82,7 @@ class List extends Component {
                
               />
             ) : (
-              <div className="List-Title" onClick={this.toggleEditingTitle}>
+              <div className="List-Title">
                 {list.title}
               </div>
             )}

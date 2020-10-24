@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from 'react';
 import { Container, Row, Col,Button,Modal,ModalHeader,ModalBody,ModalFooter,Table } from 'reactstrap';
 import Tab from  './TabComponent';
 import store from "../store";
+import avatar from ".././static/images/avatar/1.jpg"
 
 function Header(props) {
 
@@ -43,7 +44,7 @@ function Header(props) {
                                 </Button>
                                 <div class="avatars" style={{float:"right"}}>
                                 {leaderBoardData.map((data, index) => 
-                                <a onClick={toggleModal} class="avatars__item"><img class="avatar" src={data.userImg} /></a>
+                                <a onClick={toggleModal} class="avatars__item"><img class="avatar" src={data.userImg === undefined ? avatar : data.userImg} /></a>
                                 )}
                                 </div>
                             </Col>
@@ -73,7 +74,7 @@ function Header(props) {
                             <tr>
                             <td>{data.points}</td>
                             <td>{data.userid}</td>
-                            <td><img id="Avatar" alt="User Image" src={data.userImg}/></td>
+                            <td><img id="Avatar" alt="User Image" src={data.userImg === undefined ? avatar : data.userImg}/></td>
                             </tr>
                         </tbody>
                         )}

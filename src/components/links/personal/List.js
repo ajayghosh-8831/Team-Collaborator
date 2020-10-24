@@ -28,7 +28,7 @@ class List extends Component {
     const cardId = shortid.generate();
 
     dispatch({
-      type: "ADD_CARD",
+      type: "LINKS_ADD_CARD",
       payload: { cardText, cardId, listId }
     });
   };
@@ -45,7 +45,7 @@ class List extends Component {
     this.toggleEditingTitle();
 
     dispatch({
-      type: "CHANGE_LIST_TITLE",
+      type: "LINKS_CHANGE_LIST_TITLE",
       payload: { listId, listTitle: title }
     });
   };
@@ -54,7 +54,7 @@ class List extends Component {
     const { listId, list, dispatch } = this.props;
 
     dispatch({
-      type: "DELETE_LIST",
+      type: "LINKS_DELETE_LIST",
       payload: { listId, cards: list.cards }
     });
   };
@@ -82,8 +82,8 @@ class List extends Component {
                
               />
             ) : (
-              <div className="List-Title" onClick={this.toggleEditingTitle}>
-                {list.title}
+              <div className="List-Title">
+                Create your links
               </div>
             )}
 
@@ -124,7 +124,7 @@ class List extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  list: state.listsById[ownProps.listId]
+  list: state.linkslistsById[ownProps.listId]
 });
 
 export default connect(mapStateToProps)(List);
