@@ -70,10 +70,11 @@ const Board = () => {
     )}
     </div>
     <div>
-    <div className="form search">
-    <input type="text" name="search" value={searchTerm} onChange={handleChange} placeholder="Search notes.."/>
-    </div>
     {!isLoading && (
+      <div>
+      <div className="form search">
+      <input type="text" name="search" value={searchTerm} onChange={handleChange} placeholder="Search notes.."/>
+      </div>
       <div className="work-div">
       {searchResults.map(note => 
         <div className="card work-card">
@@ -83,6 +84,7 @@ const Board = () => {
           </div>
         </div>
         )}
+      </div>
       </div>
     )}
     </div>
