@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Skeleton from '@yisheng90/react-loading';
 import  store  from "../../../store"
 
-const Board = () => {
+const Board = (props) => {
 
   const [links, setLinks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +39,7 @@ const Board = () => {
     .catch((error) => {
       console.log("error while sharing links")
     });
-  }, []);
+  }, [props.activeTab]);
   //{isLoading && <Skeleton width={250} row={6} />}
   return (  
   <div>

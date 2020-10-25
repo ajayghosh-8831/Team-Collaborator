@@ -3,7 +3,7 @@ import Board from './work/Board';
 
 function OrganizationContent(props) {
   return (
-        <Board />
+        <Board activeTab={props.activeTab}/>
   );
 }
 

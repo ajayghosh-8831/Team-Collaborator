@@ -138,12 +138,12 @@ const Tab = (props) => {
         <TabPane tabId="2" >
           <Row>
           <div style={{ width: "100%", marginLeft:"3%"}}>
-          {activeMenu === "notes" && <OrganizationContent/>}
-          {activeMenu === "voice-notes" && <WorkVoiceNotes />}
+          {activeMenu === "notes" && <OrganizationContent activeTab={activeTab}/>}
+          {activeMenu === "voice-notes" && <WorkVoiceNotes activeTab={activeTab}/>}
           {activeMenu === "reminder" && <h1> Work Reminders here </h1>}
           {activeMenu === "to-do" && <h1> Work To-Do here </h1>}
           {activeMenu === "calendar" && <Calender />}
-          {activeMenu === "links" && <OrganizationLink/>}
+          {activeMenu === "links" && <OrganizationLink activeTab={activeTab}/>}
           </div>
           </Row>
         </TabPane>

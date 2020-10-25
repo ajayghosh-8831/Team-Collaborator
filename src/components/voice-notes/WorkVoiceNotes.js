@@ -3,13 +3,14 @@ import Skeleton from '@yisheng90/react-loading';
 import shortid from "shortid";
 import  store  from "../../store"
 
-const WorkVoiceNotes = () => {
+const WorkVoiceNotes = (props) => {
 
   const [voiceNotes, setVoiceNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
+    setVoiceNotes([]);
     fetch(`/fetch-all-notes/${store.getState().teamName.teamName.teamName}`)
     .then(res => res.text())
     .then(res => {
@@ -20,11 +21,13 @@ const WorkVoiceNotes = () => {
         var audioStr = arrayBufferToBase64(data.data.data);
         console.log(data.sharedByUserImg);
         var notes = {audio:base64Flag+audioStr, userImg:data.sharedByUserImg};
-        setVoiceNotes(voiceNotes => voiceNotes.concat(notes))
+        if(!voiceNotes.length > 0){
+          setVoiceNotes(voiceNotes => voiceNotes.concat(notes))
+        }
         setIsLoading(false);
       });
     });
-  }, [1]);
+  }, [props.activeTab]);
 
   function arrayBufferToBase64(buffer) {
     var binary = '';
