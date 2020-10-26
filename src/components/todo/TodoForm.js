@@ -1,224 +1,114 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import ListItems from './TodoItems'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import  store  from "../../store"
+import { CircularProgressbar } from 'react-circular-progressbar';
 
-library.add(faTrash);
+function TODO(props) {
+ 
+  const[items, setItems] = useState([]);
+  const[currentItem, setCurrentItem] = useState({currentItem: {
+                                                      text:'',
+                                                      date:'',
+                                                      key:''}});
 
-useEffect(() => {
-  effect
-  return () => {
-    cleanup
-  }
-}, [input]);
-
-class TODO extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      items:[],
-      currentItem:{
-        text:'',
-        date:'',
-        key:''
-      }
-    }
-    //this.saveItem = this.saveItem.bind(this);
-    this.handleInput = this.handleInput.bind(this);
-    this.handleInputDate = this.handleInputDate.bind(this);
-    this.deleteItem = this.deleteItem.bind(this);
-    this.setUpdate = this.setUpdate.bind(this);
-    //this.setSaved = this.setSaved.bind(this);
-  }
-  componentDidMount() {
-    fetch(`/fetch-user-todos/${store.getState().userProfile.userProf.name}`).then(function(response) {
-      if (!response.ok) {
-          throw Error(response.statusText);
-      }
-      return response;}).then(res => res.text())
-      .then(res => {
-        let responeObj = JSON.parse(res);
-        responeObj.forEach(data => {
-          console.log("fetching voice notes for personal");
-          console.log(data);
-        });
-      }).catch(console.log("No notes saved by user"))
-  }
-  componentDidUpdate(){
+  useEffect(() => {
     fetch('/fetch-user-todos/'+store.getState().userProfile.userProf.name).then(function(response) {
       if (!response.ok) {
           throw Error(response.statusText);
       }
       return response;}).then(res => res.text())
       .then(res => {
+        console.log("fetching todo for personal");
+        console.log(JSON.parse(res));
         let responeObj = JSON.parse(res);
         responeObj.forEach(data => {
-          console.log("fetching voice notes for personal");
+          console.log("fetching todo for personal");
           console.log(data);
         });
-      }).catch(console.log("No notes saved by user"))
-  }
+      }).catch(console.log("No todo saved by user"))
+  }, []);
  
-  saveItem = () => {
-    const newItem = this.state.currentItem;
+  function saveItem (){
+    const newItem = currentItem;
+    console.log("saveItem todo")
+    console.log(currentItem)
     fetch('/create-todo', {
-      method: "POST", body: JSON.stringify({ 
+      method: "POST", 
+      body: JSON.stringify({ 
         toDoItem: newItem.text, 
         doByDateTime: newItem.date,
         userId : store.getState().userProfile.userProf.name
       })   
-      }).then(response => response.json())
-      .then(success => {
-        // setSaved(true);
-        alert("saved successfully");
       })
-      .catch(error => {console.log(error); alert("failed")}
-    );
-    const items = [...this.state.items, newItem];
-    this.setState({
-      items: items,
-      currentItem:{
-        text:'',
-        date:'',
-        key:''
-      }
-    });
-  }
-  // updateItem = async item => {
-  //   await fetch('/edit-todo', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({ 
-  //       toDoItem: item.text, 
-  //       doByDateTime: item.date,
-  //     })   
-  //   }).then( json => {
-  //     this.setState({message_type:"success",message_text:item.text+"  Shared successfully"});
-  //   })
-  //   .catch((error) => {
-  //     this.setState({message_type:"error",message_text:"Error occured in shred functionality"});
-  //   });
-   
-  // }
-
-  deleteItem = ()=>{
-    const {item, dispatch } = this.props;
-    dispatch({
-      type: "DELETE_CARD",
-      payload: { todoId: item.key}
-    });
-    
-  }
-
-  addItem(e) {
-    e.preventDefault(); 
-    const newItem = this.state.currentItem;
-    if(newItem.text !=="" && newItem.date !== ""){
-      const items = [...this.state.items, newItem];
-    this.setState({
-      items: items,
-      currentItem:{
-        text:'',
-        date:'',
-        key:''
-      }
-    })
-  }
-    fetch('/edit-todo', {
-      method: "POST", body: JSON.stringify({ 
-        toDoItem: newItem.text, 
-        doByDateTime: newItem.date,
-        userId : store.getState().userProfile.userProf.name
-      })   
-      }).then(response => response.json())
+      .then(function(response) {
+        if (!response.ok) {
+            throw Error(response.statusText);
+        }
+        return response;})
+      .then(response => response.json())
       .then(success => {
-        // setSaved(true);
-        //alert("saved successfully");
+        console.log("saved todo successfully");
       })
-      .catch(error => {console.log(error); alert("failed")}
+      .catch(error => {console.log(error);}
     );
+    console.log(newItem);
+    setItems(items => items.concat(newItem));
   }
 
-  handleInput(e){
-    this.setState({
+  const handleInput = e =>{
+    console.log("handleInput");
+    console.log(e);
+    setCurrentItem({
       currentItem:{
         text: e.target.value,
-        key: Date.now()
+        date: currentItem.currentItem.date,
+        key: currentItem.currentItem.key
       }
     })
   }
 
-  handleInputDate(e){
-    this.setState({
+  const handleInputDate = e => {
+    console.log("handleInputDate");
+    console.log(e);
+    setCurrentItem({
       currentItem:{
-        date: e.target.value,
-        key: Date.now()
-      }
-    })
+      text: currentItem.currentItem.text,
+      date: e.target.value,
+      key: currentItem.currentItem.key
+    }})
   }
   
-  deleteItem(key){
-    const filteredItems= this.state.items.filter(item =>
-      item.key!==key);
-    this.setState({
-      items: filteredItems
-    })
-
-    this.deleteItem(this.key)
+  function deleteItem(key){
+    const filteredItems= items.filter(item =>item.key!==key);
+      setItems(filteredItems);
   }
-  setUpdate(text,key){
-    console.log("items:"+this.state.items);
-    const items = this.state.items;
+  
+  function setUpdate(text,key){
+    console.log("items:"+items);
     items.map(item => {      
       if(item.key===key){
         console.log(item.key +"    "+key)
         item.text= text;
       }
     })
-    this.setState({
-      items: items
-    })
-    // axios.fetch('/edit-todo', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({ 
-    //     toDoItem: items.text, 
-    //     doByDateTime: items.date,
-    //   })   
-    // }).then( json => {
-    //   this.setState({message_type:"success",message_text:items.text+"  Shared successfully"});
-    // })
-    // .catch((error) => {
-    //   this.setState({message_type:"error",message_text:"Error occured in shred functionality"});
-    // });
-    
+    setItems(items);
   }
   
- render(){
   return (
     <div className="className='card work-card loading'"  style={{textAlign: 'center'}}>
       <h1>Plans for the Day</h1>
       <header>
-        <form id="to-do-form" onSubmit={this.saveItem}>
-          <input type="text" placeholder="Enter task" value= {this.state.currentItem.text} onChange={this.handleInput}></input>
-          <input type="date" placeholder="Choose Date" value= {this.state.currentItem.date} onChange={this.handleInputDate}></input>
-          <button type="submit"  onSubmit={this.saveItem}>Add</button>
-        </form>
-        <p>{this.state.items.text}</p>
         
-          <ListItems items={this.state.items} deleteItem={this.deleteItem} setUpdate={this.setUpdate}/>
+          <input type="text" placeholder="Enter task" value= {currentItem.text} onChange={handleInput}></input>
+          <input type="datetime-local" placeholder="Choose Date" value= {currentItem.date} onChange={handleInputDate}></input>
+          <button onClick={() => saveItem()}>Add</button>
+        <p>{items.text}</p>
+        
+          <ListItems items={items} deleteItem={deleteItem} setUpdate={setUpdate}/>
         
       </header>
     </div>
   );
- }
 }
 
 

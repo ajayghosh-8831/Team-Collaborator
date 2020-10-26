@@ -1,29 +1,32 @@
 import React, {useEffect} from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import  store  from "../../store";
+import {faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 
 function ListItems(props){
-    const items = props.items;
+    const itemArray = props.items;
+    console.log("inside list items");
+    console.log(itemArray);
 
-    const listItems = items.map(item =>
-   {
-       return <div className="list" key={item.key}>
+return ( 
+<div>
+{itemArray.map(item =>
+<div className="list" key={item.currentItem.key}>
      <p>
-         <input type="text" value={item.text} onChange={(e)=>{
-             props.setUpdate(e.target.value,item.key)}}/>
+         <input type="text" value={item.currentItem.text} onChange={(e)=>{
+             props.setUpdate(e.target.value,item.currentItem.key)}}/>
+        <input type="hidden" value={item.currentItem.date}/>
         <span>
        
         <FontAwesomeIcon className="faicons" onClick={() => {
-            props.deleteItem(item.key)
-        }} icon="trash" />
+            props.deleteItem(item.currentItem.key)
+        }} icon={faTrashAlt} style={{marginLeft: "10px"}}/>
         </span>
      </p>
      
-    </div>})
-    return <div>
-        {listItems}
-    </div>;
-  }
-
-  export default ListItems;
+    </div>
+    )}
+</div>
+)
+}
+export default ListItems;
