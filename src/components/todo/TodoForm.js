@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import ListItems from './TodoItems'
 import  store  from "../../store"
-import { CircularProgressbar } from 'react-circular-progressbar';
 
 function TODO(props) {
  
