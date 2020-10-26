@@ -108,6 +108,7 @@ const Tab = (props) => {
           <NavLink 
             className={classnames({ active: activeTab === '1' })}
             onClick={() => { toggle('1'); }}
+            style={{fontWeight: "bold"}}
           >
             Personal
           </NavLink>
@@ -117,6 +118,7 @@ const Tab = (props) => {
           <NavLink
             className={classnames({ active: activeTab === '2' })}
             onClick={() => { toggle('2'); }}
+            style={{fontWeight: "bold"}}
           >
             {workTabTitle}
           </NavLink>
