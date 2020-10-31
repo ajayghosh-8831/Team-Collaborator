@@ -1,4 +1,4 @@
-import "../../styles/List.css";
+import "../styles/List.css";
 
 import React, { Component } from "react";
 import { connect } from "react-redux";

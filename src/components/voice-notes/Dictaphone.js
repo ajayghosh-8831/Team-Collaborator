@@ -1,90 +1,64 @@
-import React, { useState } from 'react'
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
-import { FormGroup, Label, Input, Spinner, Col, Row, Card, CardImg, CardText, CardBody,
-  CardTitle, CardSubtitle, Button} from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMicrophone, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from 'react';
+import MicRecorder from 'mic-recorder-to-mp3';
+
+const recorder = new MicRecorder({
+  bitRate: 128
+});
 
 const Dictaphone = (props) => {
-  
-  const [message, setMessage] = useState('')
-  const [newCard, setNewCard] = useState([]);
 
-  const commands = [
-    {
-      command: 'I would like to order *',
-      callback: (food) => setMessage(`Your order is for: ${food}`)
-    },
-    {
-      command: 'The weather is :condition today',
-      callback: (condition) => setMessage(`Today, the weather is ${condition}`)
-    },
-    {
-      command: 'My top sports are * and *',
-      callback: (sport1, sport2) => setMessage(`#1: ${sport1}, #2: ${sport2}`)
-    },
-    {
-      command: 'Pass the salt (please)',
-      callback: () => setMessage('My pleasure')
-    },
-    {
-      command: 'Hello',
-      callback: () => setMessage('Hi there!'),
-      matchInterim: true
-    },
-    {
-      command: 'Yes',
-      callback: (command, spokenPhrase, similarityRatio) => setMessage(`${command} and ${spokenPhrase} are ${similarityRatio * 100}% similar`),
-      // If the spokenPhrase is "Benji", the message would be "Beijing and Benji are 40% similar"
-      isFuzzyMatch: true,
-      fuzzyMatchingThreshold: 0.2
-    },
-    {
-      command: 'clear',
-      callback: ({ resetTranscript }) => resetTranscript()
+    const [buttonText, setButtonText] = useState('Start recording');
+    const [buttonClass, setButtonClass] = useState('btn btn-primary');
+
+    function startRecording() {
+      recorder.start().then(() => {
+        console.log("Started recording")
+        setButtonText('Stop recording');
+        setButtonClass('btn btn-primary btn-danger');
+      }).catch((e) => {
+        console.error(e);
+      });
     }
-  ]
 
-  const { transcript, resetTranscript, listening} = useSpeechRecognition({ commands })
+    function stopRecording() {
+      recorder.stop().getMp3().then(([buffer, blob]) => {
+        console.log(buffer, blob);
+        let file = new File(buffer, 'music.mp3', {
+          type: blob.type,
+          lastModified: Date.now()
+        });
 
-  console.log("###############listening##########");
-  console.log(listening);
+        let li = document.createElement('li');
+        let player = new Audio(URL.createObjectURL(file));
+        player.controls = true;
+        player.style = "width:50%"
+        li.appendChild(player);
+        document.querySelector('#playlist').appendChild(li);
+ 
+        setButtonText('Start recording');
+        setButtonClass('btn btn-primary');
+      }).catch((e) => {
+        console.error(e);
+      });
+    }
 
-  if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
-    return null
-  }
-
-  function saveNotes(){
-    SpeechRecognition.abortListening();
-    console.log("noteText");
-    console.log({transcript});
-    setNewCard(newCard.concat(<NotesCard/>))
-  }
-
-  const NotesCard = () => {
-    return <Card body>
-              <CardTitle>Transcibed notes</CardTitle>
-              <CardText>{transcript}</CardText>
-              <Button>Share</Button>
-            </Card>;
-  };
-
-  return (
-    <div>
-      <Card style={{alignItems: 'center'}}>
-        {!listening && <FontAwesomeIcon style={{marginTop: '1%'}} color='red' onClick={() => SpeechRecognition.startListening({ continuous: true })} icon={faMicrophone} size ="4x"/>}
-        {listening && <FontAwesomeIcon style={{marginTop: '1%'}} color='red' onClick={() => SpeechRecognition.abortListening()} icon={faMicrophoneSlash} size ="4x"/>}
-        &nbsp;
-        {listening && <Spinner size="md" color="primary" />}
-        <CardBody>
-          <CardText>{transcript}</CardText>
-          <Button style={{marginLeft: '10px'}} onClick={() => saveNotes()}>Save</Button>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Button onClick={resetTranscript} style={{marginRight: '10px'}}>Discard</Button>
-        </CardBody>
-      </Card>
-      {newCard}
-    </div>
-  )
+    function clickHandler(){
+      if(buttonText === "Start recording"){
+        startRecording();
+      } else if (buttonText === "Stop recording"){
+        stopRecording();
+      }
+    }
+  
+    return (
+      <div className="container text-center">
+        <h1>Voice Recorder</h1>
+        <hr />
+        <button id="recordBtn" className={buttonClass} onClick={() => clickHandler()}>{buttonText}</button>
+        <hr />
+        <ol id="playlist"></ol>
+      </div>
+    )
 }
-export default Dictaphone
+
+export default Dictaphone;

@@ -1,4 +1,4 @@
-import "../../styles/EditButtons.css";
+import "../styles/EditButtons.css";
 
 import React from "react";
 

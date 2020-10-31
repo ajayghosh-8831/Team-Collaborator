@@ -27,6 +27,10 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `Deploy to Github Pages`
+From the project folder run "npm run deploy" command to deploy this app to githubb pages.
+The Application should be up and running in - https://sarathvk1991.github.io/team-collaborator
+
 ### `yarn eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**

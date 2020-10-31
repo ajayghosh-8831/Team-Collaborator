@@ -1,18 +1,61 @@
 import React, { useState } from 'react';
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
+import { Button,Modal,TabContent, TabPane, Nav, NavItem, NavLink,Row, Col,ModalHeader, ModalBody, 
+  ModalFooter, Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
 import classnames from 'classnames';
 import PersonalContent from "./notes/PersonalContent"
 import OrganizationContent from "./notes/OrganizationContent"
 import Dictaphone from './voice-notes/Dictaphone';
+import store from "../store";
 
 const Tab = (props) => {
+  const userid = store.getState().userProfile.userProf.name;
+
   const [activeTab, setActiveTab] = useState('1');
+  const [teamName, setTeamName] = useState(callGetTeamName());
+  const [workTabTitle, setWorkTabTitle] = useState('Work');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropDown = () => setDropdownOpen(prevState => !prevState);
+ 
+  const [modal, setModal] = useState(false);
+  const toggleModal = () => setModal(!modal);
 
   const toggle = tab => {
-    if(activeTab !== tab) setActiveTab(tab);
+    if(activeTab !== tab) {
+      if(tab === '2'){
+        callGetTeamName();
+        console.log("teamName "+teamName);
+        if(teamName == undefined || teamName == ""){
+          setWorkTabTitle("Join a team");
+          console.log("No teams are assoiciated to your account");
+          //opening modal to select your team
+          toggleModal();
+        }else{
+          setActiveTab(tab);
+          setWorkTabTitle("Work "+"("+teamName+")");
+        }
+      }else{
+        setActiveTab(tab);
+      }
+    }
+  }
+
+  async function callGetTeamName() {
+    var response = await fetch('/teams/'+userid);
+    let data = await response.json()
+    if(data.teams !== undefined){
+      console.log(data.teams[0])
+      setTeamName(data.teams[0]);
+      setWorkTabTitle("Work "+"("+data.teams[0]+")");
+    }
+  }
+
+  async function addToTeam(team) {
+  const response = await fetch('/teams/'+userid+'/'+team);
+  const data = await response.json();
+  callGetTeamName(userid);
+  toggleModal();
+  setWorkTabTitle("Work "+"("+team+")");
   }
 
   let activeMenu = props.activeMenu;
@@ -35,7 +78,7 @@ const Tab = (props) => {
             className={classnames({ active: activeTab === '2' })}
             onClick={() => { toggle('2'); }}
           >
-            Work
+            {workTabTitle}
           </NavLink>
         </NavItem>
       </Nav>
@@ -47,7 +90,7 @@ const Tab = (props) => {
             </Col>           
           </Row>
           <Row>
-          <div style={{ width: "90%"}}>
+          <div style={{ width: "100%"}}>
           {activeMenu === "notes" && <PersonalContent/>}
           {activeMenu === "voice-notes" && <Dictaphone />}
           {activeMenu === "reminder" && <h1> Personal Reminders here </h1>}
@@ -64,7 +107,7 @@ const Tab = (props) => {
             </Col>
           </Row>
           <Row>
-          <div style={{ width: "90%"}}>
+          <div style={{ width: "100%"}}>
           {activeMenu === "notes" && <OrganizationContent/>}
           {activeMenu === "voice-notes" && <Dictaphone />}
           {activeMenu === "reminder" && <h1> Work Reminders here </h1>}
@@ -75,6 +118,28 @@ const Tab = (props) => {
           </Row>
         </TabPane>
       </TabContent>
+      
+
+      <Modal isOpen={modal} toggle={toggleModal} backdrop="static">
+        <ModalHeader toggle={toggleModal}>Your Teams</ModalHeader>
+        <ModalBody style={{ textAlign: 'Center' }}>
+          <Dropdown isOpen={dropdownOpen} toggle={toggleDropDown}>
+            <DropdownToggle caret>
+              Select your team
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem onClick={() => addToTeam("Expedia")}>Expedia</DropdownItem>
+              <DropdownItem divider/>
+              <DropdownItem onClick={() => addToTeam("IBS")}>IBS</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={toggleModal}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+
+
     </div>
   );
 }

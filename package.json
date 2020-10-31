@@ -1,5 +1,5 @@
 {
-  "name": "team_collab",
+  "name": "team-collaborator",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -11,21 +11,23 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "cors": "^2.8.5",
     "lodash.throttle": "^4.1.1",
+    "mic-recorder-to-mp3": "^2.2.2",
+    "moment": "^2.28.0",
     "mongoose": "^5.10.2",
+    "nodemon": "^2.0.4",
     "passport": "^0.4.1",
     "passport-google-oauth": "^2.0.0",
     "prop-types": "^15.7.2",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
-    "react-audio-waveform": "0.0.5",
     "react-beautiful-dnd": "^11.0.0-beta.3",
     "react-dom": "^16.13.1",
     "react-google-login": "^5.1.21",
     "react-redux": "^7.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
-    "react-speech-recognition": "^3.2.0",
     "react-swipeable-views": "latest",
     "react-tabs": "^3.1.1",
     "react-textarea-autosize": "^7.1.0",
@@ -33,11 +35,16 @@
     "redux": "^4.0.1",
     "shortid": "^2.2.14"
   },
+  "proxy": "http://localhost:4000",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "client": "npm start",
+    "server": "nodemon server/server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -53,5 +60,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0"
   }
 }
