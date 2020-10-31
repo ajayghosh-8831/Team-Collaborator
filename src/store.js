@@ -128,10 +128,22 @@ const cardsById = (state = {}, action) => {
   }
 };
 
+const userProfile =(state = {}, action) => {
+  switch(action.type){
+    case "USER_LOGIN":{
+      const {userEmail,name,imageUrl} = action.payload;
+      return{...state, userProf:{userEmail,name,imageUrl}}
+    }
+    default:
+      return state;
+  }
+}
+
 const reducers = combineReducers({
   board,
   listsById,
-  cardsById
+  cardsById,
+  userProfile
 });
 
 const saveState = state => {
@@ -166,7 +178,7 @@ store.subscribe(
 
 console.log(store.getState());
 if (!store.getState().board.lists.length) {
-  console.log("SEED");
+  console.log("SEED personal");
   seed(store);
 }
 

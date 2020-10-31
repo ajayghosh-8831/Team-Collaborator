@@ -14,43 +14,37 @@ function SideBar(props) {
         return (
             <span>
                 <Col id="Menu" md="2">
-                <span class="navLabel">Pick your tool here</span>
+                <span className="navLabel">Pick your tool here</span>
                 <hr/>
                 <ListGroup>
                     <Row>
                     <ListGroupItem active tag="button" onClick={() => setActiveMenu("notes")}>
                     <FontAwesomeIcon icon={faAlignJustify} size ="2x"/>
-                    <span class="navLabel">Notes</span>
-                    </ListGroupItem>
-                    </Row>
-                    <Row>
-                    <ListGroupItem tag="button" onClick={() => setActiveMenu("calendar")}>
-                    <FontAwesomeIcon icon={faCalendarDay} size ="2x"/>
-                    <span class="navLabel">Calender</span>
+                    <span className="navLabel">Notes</span>
                     </ListGroupItem>
                     </Row>
                     <Row>
                     <ListGroupItem tag="button" onClick={() => setActiveMenu("links")}>
                     <FontAwesomeIcon icon={faLink} size ="2x"/>
-                    <span class="navLabel">Links</span>
+                    <span className="navLabel">Links</span>
                     </ListGroupItem>
                     </Row>
                     <Row>
                     <ListGroupItem tag="button" onClick={() => setActiveMenu("voice-notes")}>
                     <FontAwesomeIcon icon={faMicrophone} size ="2x"/>
-                    <span class="navLabel">Voice Notes</span>
+                    <span className="navLabel">Voice Notes</span>
                     </ListGroupItem>
                     </Row>
                     <Row>
-                    <ListGroupItem tag="button" onClick={() => setActiveMenu("reminder")}>
-                    <FontAwesomeIcon icon={faBell} size ="2x"/>
-                    <span class="navLabel">Reminder</span>
+                    <ListGroupItem tag="button" onClick={() => setActiveMenu("calendar")}>
+                    <FontAwesomeIcon icon={faCalendarDay} size ="2x"/>
+                    <span className="navLabel">Calender</span>
                     </ListGroupItem>
                     </Row>
                     <Row>
                     <ListGroupItem tag="button" onClick={() => setActiveMenu("to-do")}>
                     <FontAwesomeIcon icon={faTasks} size ="2x"/>
-                    <span class="navLabel">To Do</span>
+                    <span className="navLabel">To Do</span>
                     </ListGroupItem>
                     </Row>
                 </ListGroup>

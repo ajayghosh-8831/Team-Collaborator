@@ -52,4 +52,13 @@ export default store => {
       cardText: "Card 2"
     }
   });
+
+  store.dispatch({
+    type:"USER_LOGIN",
+    payload:{
+      userEmail:"",
+      name:"",
+      imageUrl:"https://www.w3schools.com/howto/img_avatar2.png"
+    }
+  });
 };

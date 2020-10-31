@@ -1,4 +1,4 @@
-import "../../styles/Board.css";
+import "../styles/Board.css";
 
 import React, { Component } from "react";
 import { connect } from "react-redux";
